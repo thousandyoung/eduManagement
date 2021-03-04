@@ -16,11 +16,12 @@ public:
     string grade;      //年级
     string college;  //学院
     string major;    //专业
+    string Class;     //班级
     string course;   //学生全部课程信息。以 课程名字/授课地点/授课时间/授课老师姓名/成绩&课程姓名/授课地点/.....
     Student() {;}
-    Student(string Number,string Password,string Name,string Grade,string College,string Major,string course="\0")
+    Student(string Number,string Password,string Name,string Grade,string College,string Major,string Classstring course="\0")
     {
-        number=Number,password=Password,name=Name,grade=Grade,college=College,major=Major,this->course=course;
+        number=Number,password=Password,name=Name,grade=Grade,college=College,major=Major,this->Class=Class,this->course=course;
     }
     void transCourse(const Course & x) ;     //将课程类对象信息提取出来，并存在course数据中
     void set_number(string number) {this->number=number;}
@@ -30,6 +31,7 @@ public:
     void set_major(string major) {this->major=major;}
     void set_course(string course) {this->course=course;}
     void set_college(string college) {this->college=college;}
+    void set_class(string Class) {this->Class=Class;}
 };
 
 void Student::transCourse(const Course & x)
@@ -251,30 +253,5 @@ int checkAccount(string password, vector<T>& y) {
 }
 */
 
-class System
-{
-public:
-	void load_interface();					//登陆界面
-	void exit_system();					    //退出系统
-	void load_account();					//读取账号密码
-	void set_stu_account();					//设置学生账户
-	void enter_stu_account();				//学生身份登陆
-	void student_functionshow();			//学生用户功能界面
-	void clerk_functionshow();				//教务员功能界面
-	void set_clerk_account();				//设置教务员账户
-	void enter_clerk_account();				//教务员身份登陆
-	void teacher_functionshow();			//教师功能界面
-	void set_teacher_account();				//设置教师账户
-	void enter_teacher_account();			//教师身份登陆
-	void save_undst();						//保存学生数据
-	void load_undst();						//读取学生数据
-	void load_index();						//读取索引
-	void change_password();					//修改密码
-	void createRecord();					//输入收入
-	void editRecord();						//修改记录
-	void deleteRecord();					//删除记录
-	void searchRecord();					//查找记录
-};
-
 //教师增加选课信息——>教务员同意————》发布选课信息————》增加教师选课的信息、学生信息
-//教师增加一门课程的同时，应该就在文件里添加上课程信息
+//教师增加一门课程的同时，应该在文件里添加上课程信息
