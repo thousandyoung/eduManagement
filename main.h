@@ -21,56 +21,25 @@ using namespace std;
 multimap<string, string>Stu;
 multimap<string, string>Tea;
 multimap<string, string>Ad;
+//---------------------------------------各类定义-----------------------------------------
+class Course       //存储在课程文件中的课程类
+{
+public:
+    string cou_name;       //课程名字
+    string tea_name;       //授课老师姓名
+    string stu_name;      //学生姓名
+    string stu_number;    //学生学号
+    string position;       //授课地点
+    string time;          //授课时间
+    string mark;         //学生成绩
+};
+
 class User {
 public:
 	string number;      //学号 只能用学号或者工号登录
 	string password;
 };
-//主程序
-class SystemOp {
-public:
-	int init() {
-		openFind("Stu.dat", Stu);
-		openFind("Teacher.dat", Tea);
-		openFind("Admin.dat", Ad);
-	}
-	int Logout();
-};
-class StuOp
-{
-public:
-	int Stu_Login(string name, string password); //学生登陆
-	void Stu_ReadScore();
-};
 
-class TeaOp
-{
-public:
-	int Tea_Login(string name, string password);				//老师登陆
-	int Tea_ReadClassScore();       //查询这门课程成绩
-	int Tea_SetPropotion();         //设置平均分-期末分比例
-	int Tea_ModifyScore();          //批改成绩;
-	int InputScore();
-	int CalScore();
-};
-
-class AdminOp
-{
-public:
-	int Admin_Login();
-	int Admin_Modify();
-	int Admin_Search()
-	{
-		int SearchStu();
-		int SearchTea();
-		int SearchCourse();
-		return 0;
-	};
-	int SearchStu();
-	int SearchTea();
-	int SearchCourse();
-	int multi_Search();
-};
 class Student : public User
 {
 public:
@@ -127,18 +96,8 @@ public:
 	Find() {}
 	Find(string a, string b):key(a),value(b){}
 };
+//-----------------------------------------功能函数-----------------------------------
 
-class Course       //存储在课程文件中的课程类
-{
-public:
-	string cou_name;       //课程名字
-	string tea_name;       //授课老师姓名
-	string stu_name;      //学生姓名
-	string stu_number;    //学生学号
-	string position;       //授课地点
-	string time;          //授课时间
-	string mark;         //学生成绩
-};
 
 //读取索引信息
 void openFind(string file_name, multimap<string, string>& x);
@@ -187,4 +146,53 @@ string openAccount(string ID, const multimap<string, string>& x);
 //传入文件夹的名称
 template<typename T>
 int copyAllInfo(string file_name, vector<T>& x);
+
+
+//----------------------------------OP类-------------------------------------------
+
+//主程序
+class SystemOp {
+public:
+    void init() {
+        openFind("Stu.dat", Stu);
+        openFind("Teacher.dat", Tea);
+        openFind("Admin.dat", Ad);
+    }
+    int Logout();
+};
+class StuOp
+{
+public:
+    int Stu_Login(string name, string password); //学生登陆
+    void Stu_ReadScore();
+};
+
+class TeaOp
+{
+public:
+    int Tea_Login(string name, string password);                //老师登陆
+    int Tea_ReadClassScore();       //查询这门课程成绩
+    int Tea_SetPropotion();         //设置平均分-期末分比例
+    int Tea_ModifyScore();          //批改成绩;
+    int InputScore();
+    int CalScore();
+};
+
+class AdminOp
+{
+public:
+    int Admin_Login();
+    int Admin_Modify();
+    int Admin_Search()
+    {
+        int SearchStu();
+        int SearchTea();
+        int SearchCourse();
+        return 0;
+    };
+    int SearchStu();
+    int SearchTea();
+    int SearchCourse();
+    int multi_Search();
+};
 #endif /* edu_hpp */
