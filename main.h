@@ -164,7 +164,7 @@ class StuOp
 {
 public:
     int Stu_Login(string name, string password); //学生登陆
-    void Stu_ReadScore();
+    vector<Student> Stu_ReadScore(string stu_number);//用学号查成绩
 };
 
 class TeaOp
