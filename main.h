@@ -17,15 +17,18 @@
 #include<map>
 
 using namespace std;
+multimap<string, string>x;
 
 class User {
 public:
 	string number;      //学号 只能用学号或者工号登录
 	string password;
 };
-class SystemOp {
+class SystemOp {//进入程序初始化
 public:
-	int Login();
+	int init(string file_name) {
+		openFind(file_name, x);
+	}
 	int Logout();
 };
 class StuOp
