@@ -17,31 +17,36 @@
 #include<map>
 
 using namespace std;
-multimap<string, string>x;
 
+multimap<string, string>Stu;
+multimap<string, string>Tea;
+multimap<string, string>Ad;
 class User {
 public:
 	string number;      //学号 只能用学号或者工号登录
 	string password;
 };
-class SystemOp {//进入程序初始化
+//主程序
+class SystemOp {
 public:
-	int init(string file_name) {
-		openFind(file_name, x);
+	int init() {
+		openFind("Stu.dat", Stu);
+		openFind("Teacher.dat", Tea);
+		openFind("Admin.dat", Ad);
 	}
 	int Logout();
 };
 class StuOp
 {
 public:
-	int Stu_Login(); //学生登陆
+	int Stu_Login(string name, string password); //学生登陆
 	void Stu_ReadScore();
 };
 
 class TeaOp
 {
 public:
-	int Tea_Login();				//老师登陆
+	int Tea_Login(string name, string password);				//老师登陆
 	int Tea_ReadClassScore();       //查询这门课程成绩
 	int Tea_SetPropotion();         //设置平均分-期末分比例
 	int Tea_ModifyScore();          //批改成绩;
