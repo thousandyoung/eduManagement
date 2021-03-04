@@ -6,24 +6,24 @@
 #include<map>
 using namespace std;
 class User {
-	string number;      //Ñ§ºÅ Ö»ÄÜÓÃÑ§ºÅ»òÕß¹¤ºÅµÇÂ¼
+	string number;      //å­¦å· åªèƒ½ç”¨å­¦å·æˆ–è€…å·¥å·ç™»å½•
 	string password;
 };
 class Student : public User
 {
 public:
     string name;
-    string grade;      //Äê¼¶
-    string college;  //Ñ§Ôº
-    string major;    //×¨Òµ
-    string Class;     //°à¼¶
-    string course;   //Ñ§ÉúÈ«²¿¿Î³ÌĞÅÏ¢¡£ÒÔ ¿Î³ÌÃû×Ö/ÊÚ¿ÎµØµã/ÊÚ¿ÎÊ±¼ä/ÊÚ¿ÎÀÏÊ¦ĞÕÃû/³É¼¨&¿Î³ÌĞÕÃû/ÊÚ¿ÎµØµã/.....
+    string grade;      //å¹´çº§
+    string college;  //å­¦é™¢
+    string major;    //ä¸“ä¸š
+    string Class;     //ç­çº§
+    string course;   //å­¦ç”Ÿå…¨éƒ¨è¯¾ç¨‹ä¿¡æ¯ã€‚ä»¥ è¯¾ç¨‹åå­—/æˆè¯¾åœ°ç‚¹/æˆè¯¾æ—¶é—´/æˆè¯¾è€å¸ˆå§“å/æˆç»©&è¯¾ç¨‹å§“å/æˆè¯¾åœ°ç‚¹/.....
     Student() {;}
     Student(string Number,string Password,string Name,string Grade,string College,string Major,string Classstring course="\0")
     {
         number=Number,password=Password,name=Name,grade=Grade,college=College,major=Major,this->Class=Class,this->course=course;
     }
-    void transCourse(const Course & x) ;     //½«¿Î³ÌÀà¶ÔÏóĞÅÏ¢ÌáÈ¡³öÀ´£¬²¢´æÔÚcourseÊı¾İÖĞ
+    void transCourse(const Course & x) ;     //å°†è¯¾ç¨‹ç±»å¯¹è±¡ä¿¡æ¯æå–å‡ºæ¥ï¼Œå¹¶å­˜åœ¨courseæ•°æ®ä¸­
     void set_number(string number) {this->number=number;}
     void set_pass(string password) {this->password=password;}
     void set_name(string password) {this->name=name;}
@@ -42,27 +42,209 @@ void Student::transCourse(const Course & x)
 class Teacher : public User
 {
 public:
-    string name;   //ĞÕÃû
-    string course;    //Ëù½Ì¿Î³ÌÃû×ÖµÄ¼¯ºÏ ¸ñÊ½Îª ¿Î³ÌÃû×Ö&¿Î³ÌÃû×Ö&...
+    string name;   //å§“å#include<iostream>
+#include<fstream>
+#include<string>
+#include<vector>
+#include<cstdlib>
+#include<map>
+#include"main.h"
+using namespace std;
+
+void Student::transCourse(const Course& x)
+{
+	this->course += x.cou_name + "/" + x.position + "/" + x.time + "/" + x.tea_name + "/" + x.mark + "&";
+}
+
+/*----åŠŸèƒ½å‡½æ•°-----*/
+//è¯»å–ç´¢å¼•ä¿¡æ¯
+void openFind(string file_name, multimap<string, string>& x)
+{
+	fstream f(file_name, ios::binary | ios::in);
+	f.seekg(0, ios::end);
+	long pos = f.tellg();    //å¾—åˆ°æ–‡ä»¶æœ€åçš„æŒ‡é’ˆä½ç½®
+	Find temp;
+	for (f.seekg(0, ios::beg);f.tellg() != pos;)
+	{
+		f.read((char*)&temp, sizeof(temp));
+		x.insert(make_pair(temp.key, temp.value));     //å°†ç´¢å¼•ä¿¡æ¯è¯»å…¥å®¹å™¨
+	}
+	f.close();
+}
+
+//æ ¹æ®å­¦å·æˆ–è€…å§“åæ‰¾åˆ°å¯¹åº”ä½ç½®å¹¶è¯»å–ä¿¡æ¯
+//å½“å­¦å·æˆ–è€…å§“åä¸å­˜åœ¨æ—¶ï¼Œè¿”å›0ï¼Œå¦åˆ™è¿”å›1
+template<typename T>
+int copyInfo(string info, multimap<string, string>& x, vector<T>& y)    //yä¸ºéœ€è¦è¯»å–çš„ä¿¡æ¯;ç”¨vectorä¿å­˜åŸå› æ˜¯é˜²æ­¢æœ‰å¤šä¸ªå¯¹è±¡
+{
+	int num = x.count(info);
+	if (num == 0) return 0;
+	multimap<string, string>::iterator it = x.find(info);
+	for (int i = 0;i < num;i++)
+	{
+		string posi = (*it).second;    //å¾—åˆ°ä¿¡æ¯çš„åç§»é‡,æ–‡ä»¶ç»å¯¹åœ°å€&åç§»é‡
+		string a(posi, 0, posi.find('&')), b(posi, posi.find('&') + 1, posi.size() - posi.find('&') - 1);
+		fstream f(a, ios::binary | ios::in);
+		f.seekg(long(sizeof(T) * atoi(b.c_str())), ios::beg);      //åç§»åˆ°å¯¹åº”ä½ç½®
+		T temp;
+		f.read((char*)&temp, sizeof(T));      //è¯»å–ä¿¡æ¯
+		y.push_back(temp);
+		it++;
+		f.close();
+	}
+	return 1;
+}
+
+//æ ¹æ®å­¦å·æˆ–è€…å§“åï¼ŒæŠŠä¿®æ”¹åçš„yå†™å…¥å¯¹åº”ä½ç½®
+//å½“å§“åæˆ–è€…å­¦å·ä¸å­˜åœ¨æ—¶ï¼Œè¿”å›0ï¼›å¦åˆ™è¿”å›1ï¼›
+template<typename T>
+int modifyInfo(string info, multimap<string, string>& x, const T& y)
+{
+	if (x.count(info) == 0) return 0;
+	multimap<string, string>::iterator it = x.find(info);
+	string posi = (*it).second;    //å¾—åˆ°ä¿¡æ¯çš„åç§»é‡,æ–‡ä»¶ç»å¯¹åœ°å€&åç§»é‡
+	string a(posi, 0, posi.find('&')), b(posi, posi.find('&') + 1, posi.size() - posi.find('&') - 1);
+	fstream f(a, ios::binary | ios::out);
+	f.seekp(long(sizeof(T) * atoi(b.c_str())), ios::beg);
+	f.write((char*)&y, sizeof(T));
+	f.close();
+	return 1;
+}
+
+//æ ¹æ®å­¦å·æˆ–è€…å§“ååˆ é™¤æŸå¯¹è±¡çš„ç´¢å¼•ä¿¡æ¯
+template<typename T>
+void deleteInfo(string info, multimap<string, string>& x, string file_name)
+{
+	fstream f(file_name, ios::binary | ios::out | ios::trunc);
+	x.erase(info);
+	multimap<string, string>::iterator it = x.begin();    //å°†ä¿®æ”¹åçš„ç´¢å¼•ä¿¡æ¯é‡æ–°å†™å…¥æ–‡ä»¶
+	for (;it != x.end();it++)
+	{
+		Find temp((*it).first, (*it).second);
+		f.write((char*)&temp, sizeof(temp));
+	}
+	f.close();         //ç´¢å¼•ä¿¡æ¯åœ¨æ–‡ä»¶ä¸­åˆ é™¤å®Œæ¯•
+}
+
+//å¢åŠ ä¿¡æ¯ï¼Œç›´æ¥åœ¨æ–‡ä»¶åè¿½åŠ ,å¹¶è¿”å›è¯¥ä¿¡æ¯åç§»é‡ï¼ˆä¾‹å¦‚è¯¥ä¿¡æ¯å‰é¢å·²ç»æœ‰17ä¸ªä¿¡æ¯ï¼Œåˆ™è¿”å›18ï¼‰
+template<typename T>
+int addInfo(const T& info, string file_name)
+{
+	fstream f(file_name, ios::out | ios::binary | ios::app);
+	f.write((char*)&info, sizeof(T));
+	int value = ((long)f.tellp() - ios::beg) / sizeof(T);
+	f.close();
+	return value;
+}
+
+//å¢åŠ ç´¢å¼•ä¿¡æ¯
+void addIndex(string key, string value, multimap<string, string>& x, string file_name)     //file_nameä¸ºç´¢å¼•æ–‡ä»¶
+{
+	x.insert(make_pair(key, value));
+	Find temp(key, value);
+	fstream f(file_name, ios::binary | ios::app | ios::out);
+	f.write((char*)&temp, sizeof(temp));
+	f.close();
+}
+
+//å¢åŠ å­¦ç”Ÿã€æ•™å¸ˆã€æ•™åŠ¡å‘˜äººå‘˜ä¿¡æ¯
+//éœ€è¦åœ¨æ•°æ®æ–‡ä»¶å’Œç´¢å¼•æ–‡ä»¶é‡Œè¿½åŠ ä¿¡æ¯
+//éœ€è¦æä¾›äººå‘˜ä¿¡æ¯ï¼Œå¯¹åº”çš„ç´¢å¼•å¯¹è±¡ï¼Œäººå‘˜ä¿¡æ¯æ–‡ä»¶åï¼Œç´¢å¼•ä¿¡æ¯æ–‡ä»¶å
+//ç”±äºæœ‰ä»¥å§“åä¸ºä¸»å¯¼å’Œä»¥å­¦å·ä¸ºä¸»å¯¼çš„æ–‡ä»¶ï¼Œæ‰€ä»¥éœ€è¦ä¸¤ä¸ªç´¢å¼•æ–‡ä»¶
+template<typename T>
+void addPerson(const T& info, multimap<string, string> x2, multimap<string, string> x3, string file_name1, string file_name2, string file_name3)
+{
+	int num = addInfo(info, file_name1);   //å¾—åˆ°åç§»é‡
+	addIndex(info.name, file_name1 + "&" + to_string(num), x2, file_name2);
+	addIndex(info.number, file_name1 + "&" + to_string(num), x3, file_name3);
+}
+
+//å‰æï¼šå­¦ç”Ÿé€‰è¯¾æˆåŠŸ
+//åœ¨å¯¹åº”è¯¾ç¨‹ä¸‹å¢åŠ ä¿¡æ¯ï¼Œå¹¶æ›´æ–°è¯¾ç¨‹ç´¢å¼•ä¿¡æ¯ï¼›æ›´æ”¹å­¦ç”Ÿä¸ªäººä¿¡æ¯ï¼Œæ›´æ–°æ–‡ä»¶
+//éœ€è¦æä¾›å­¦ç”Ÿä¸ªäººä¿¡æ¯ï¼Œå­¦å·ç´¢å¼•å¯¹è±¡ï¼Œè¯¾ç¨‹åå­—ï¼Œè¯¾ç¨‹ç´¢å¼•å¯¹è±¡ï¼Œè¯¾ç¨‹ä¿¡æ¯æ–‡ä»¶ï¼Œç´¢å¼•ä¿¡æ¯æ–‡ä»¶å
+//ç”±äºæœ‰ä»¥å§“åä¸ºä¸»å¯¼å’Œä»¥å­¦å·ä¸ºä¸»å¯¼çš„æ–‡ä»¶ï¼Œæ‰€ä»¥éœ€è¦ä¸¤ä¸ªç´¢å¼•æ–‡ä»¶
+void addCourse(const Student& info, multimap<string, string> x1, string cou_name, multimap<string, string>& x2, multimap<string, string>& x3, string file_name1, string file_name2,string file_name3)
+{
+	fstream f(file_name1, ios::in | ios::binary);    //æ‰“å¼€æ–‡ä»¶ï¼Œè¯»å–è¯¾ç¨‹ä¿¡æ¯
+	Course temp;
+	f.read((char*)&temp, sizeof(Course)); f.close();
+	temp.stu_name = info.name, temp.stu_number = info.number;
+	info.transCourse(temp);   //ä¿®æ”¹å­¦ç”Ÿè¯¾ç¨‹ä¿¡æ¯
+	modifyInfo(info.number, x1, info);  //ä¿®æ”¹åˆ°å­¦ç”Ÿæ–‡ä»¶ä¸­
+	int num = addInfo(temp, file_name1); //ä¿®æ”¹è¯¾ç¨‹æ–‡ä»¶ä¿¡æ¯
+	addIndex(info.name, file_name1 + "&" + to_string(num), x2, file_name2);
+	addIndex(info.number, file_name1 + "&" + to_string(num), x3, file_name3);
+}
+
+
+//åˆ¤æ–­è´¦å·æ˜¯å¦å­˜åœ¨ï¼Œå­˜åœ¨åˆ™è¿”å›å¯†ç ï¼Œå¦åˆ™è¿”å›ç©ºå­—ç¬¦ä¸²
+//é€šè¿‡å­¦å·æˆ–è€…å§“åæ‰¾åˆ°å­¦ç”Ÿä¿¡æ¯è¡¨ï¼Œè¯»å‡ºè´¦å·å¯†ç ä¿¡æ¯
+//å‡½æ•°éœ€è¦æä¾›ç”¨æˆ·ç™»å½•çš„è´¦å·ä»¥åŠå¯¹åº”çš„multimapå¯¹è±¡ï¼Œå…¶ä¸­è¯¥å‡½æ•°åªå¤„ç†ä¸€ä¸ªç´¢å¼•å¯¹è±¡
+template<typename T>
+string openAccount(string ID, const multimap<string, string>& x) {
+	int flag = x.count(ID);      //æ£€æŸ¥è´¦æˆ·æ˜¯å¦å­˜åœ¨
+	if (flag == 0) return "\0";     //è´¦æˆ·ä¸å­˜åœ¨ç›´æ¥è¿”å›ç©ºå­—ç¬¦ä¸²
+	multimap<string, string>::iterator it = x.find(ID);
+	string posi = (*it).second;    //å¾—åˆ°ä¿¡æ¯çš„åç§»é‡,æ–‡ä»¶ç»å¯¹åœ°å€&åç§»é‡
+	string a(posi, 0, posi.find('&')), b(posi, posi.find('&') + 1, posi.size() - posi.find('&') - 1);
+	fstream f(a, ios::binary | ios::in);
+	f.seekg(long(sizeof(T) * atoi(b.c_str())), ios::beg);      //åç§»åˆ°å¯¹åº”ä½ç½®
+	T temp;
+	f.read((char*)&temp, sizeof(T));   //è¯»å–ä¿¡æ¯
+	f.close();
+	return temp.password;
+}
+
+//è¯»å–æ•´ä¸ªæ–‡ä»¶çš„ä¿¡æ¯
+//ä¼ å…¥æ–‡ä»¶å¤¹çš„åç§°
+template<typename T>
+int copyAllInfo(string file_name, vector<T>& x)
+{
+	fstream f(file_name, ios::binary | ios::in);
+	f.seekg(0, ios::end);
+	long End = f.tellg();    //è·å–æœ«ä½ç½®
+	f.seekg(0, ios::beg);
+	for (;f.tellg() != End;)
+	{
+		T temp;
+		f.read((char*)&temp, sizeof(T));
+		x.push_back(temp);
+	}
+	f.close();    //è¯»å–å®Œå…¨éƒ¨ä¿¡æ¯
+}
+
+/*
+//éªŒè¯è´¦å·å¯†ç 
+template<typename T>
+int checkAccount(string password, vector<T>& y) {
+	if (y.empty())return -1;
+	if (y[0].password == password)return 1;
+	return 0;
+}
+*/
+
+//æ•™å¸ˆå¢åŠ é€‰è¯¾ä¿¡æ¯â€”â€”>æ•™åŠ¡å‘˜åŒæ„â€”â€”â€”â€”ã€‹å‘å¸ƒé€‰è¯¾ä¿¡æ¯â€”â€”â€”â€”ã€‹å¢åŠ æ•™å¸ˆé€‰è¯¾çš„ä¿¡æ¯ã€å­¦ç”Ÿä¿¡æ¯
+//æ•™å¸ˆå¢åŠ ä¸€é—¨è¯¾ç¨‹çš„åŒæ—¶ï¼Œåº”è¯¥åœ¨æ–‡ä»¶é‡Œæ·»åŠ ä¸Šè¯¾ç¨‹ä¿¡æ¯
+    string course;    //æ‰€æ•™è¯¾ç¨‹åå­—çš„é›†åˆ æ ¼å¼ä¸º è¯¾ç¨‹åå­—&è¯¾ç¨‹åå­—&...
     Teacher() {;}
     Teacher(string Number,string Password,string Name,string course="\0")
     {
         number=Number,password=Password,name=Name,this->course=course;
     }
-    void transCourse(const Course & x) {course+=x.cou_name+"&";}     //½«¿Î³ÌÀà¶ÔÏóĞÅÏ¢ÌáÈ¡³öÀ´£¬²¢´æÔÚcourseÊı¾İÖĞ
+    void transCourse(const Course & x) {course+=x.cou_name+"&";}     //å°†è¯¾ç¨‹ç±»å¯¹è±¡ä¿¡æ¯æå–å‡ºæ¥ï¼Œå¹¶å­˜åœ¨courseæ•°æ®ä¸­
     void set_number(string number) {this->number=number;}
     void set_pass(string password) {this->password=password;}
     void set_name(string password) {this->name=name;}
     void set_course(string course) {this->course=course;}
 };
 
-class Admini :public User      //½ÌÎñÔ±
+class Admini :public User      //æ•™åŠ¡å‘˜
 {
 public:
-    string name;        //ĞÕÃû
+    string name;        //å§“å
 };
 
-class Find       //Ë÷ÒıÀà¼üÖµ¶Ô
+class Find       //ç´¢å¼•ç±»é”®å€¼å¯¹
 {
 public:
     string key;
@@ -74,50 +256,50 @@ public:
     }
 };
 
-class Course       //´æ´¢ÔÚ¿Î³ÌÎÄ¼şÖĞµÄ¿Î³ÌÀà
+class Course       //å­˜å‚¨åœ¨è¯¾ç¨‹æ–‡ä»¶ä¸­çš„è¯¾ç¨‹ç±»
 {
 public:
-    string cou_name;       //¿Î³ÌÃû×Ö
-    string tea_name;       //ÊÚ¿ÎÀÏÊ¦ĞÕÃû
-    string stu_name;      //Ñ§ÉúĞÕÃû
-    string stu_number;    //Ñ§ÉúÑ§ºÅ
-    string position;       //ÊÚ¿ÎµØµã
-    string time;          //ÊÚ¿ÎÊ±¼ä
-    string mark;         //Ñ§Éú³É¼¨
+    string cou_name;       //è¯¾ç¨‹åå­—
+    string tea_name;       //æˆè¯¾è€å¸ˆå§“å
+    string stu_name;      //å­¦ç”Ÿå§“å
+    string stu_number;    //å­¦ç”Ÿå­¦å·
+    string position;       //æˆè¯¾åœ°ç‚¹
+    string time;          //æˆè¯¾æ—¶é—´
+    string mark;         //å­¦ç”Ÿæˆç»©
 };
 
-/*----¹¦ÄÜº¯Êı-----*/
-//¶ÁÈ¡Ë÷ÒıĞÅÏ¢
+/*----åŠŸèƒ½å‡½æ•°-----*/
+//è¯»å–ç´¢å¼•ä¿¡æ¯
 void openFind(string file_name,multimap<string,string> & x)
 {
     fstream f(file_name,ios::binary|ios::in);
     f.seekg(0,ios::end);
-    long pos=f.tellg();    //µÃµ½ÎÄ¼ş×îºóµÄÖ¸ÕëÎ»ÖÃ
+    long pos=f.tellg();    //å¾—åˆ°æ–‡ä»¶æœ€åçš„æŒ‡é’ˆä½ç½®
     Find temp;
     for(f.seekg(0,ios::beg);f.tellg()!=pos;)
     {
         f.read((char*)&temp,sizeof(temp));
-        x.insert(make_pair(temp.key,temp.value));     //½«Ë÷ÒıĞÅÏ¢¶ÁÈëÈİÆ÷
+        x.insert(make_pair(temp.key,temp.value));     //å°†ç´¢å¼•ä¿¡æ¯è¯»å…¥å®¹å™¨
     }
     f.close();
 }
 
-//¸ù¾İÑ§ºÅ»òÕßĞÕÃûÕÒµ½¶ÔÓ¦Î»ÖÃ²¢¶ÁÈ¡ĞÅÏ¢
-//µ±Ñ§ºÅ»òÕßĞÕÃû²»´æÔÚÊ±£¬·µ»Ø0£¬·ñÔò·µ»Ø1
+//æ ¹æ®å­¦å·æˆ–è€…å§“åæ‰¾åˆ°å¯¹åº”ä½ç½®å¹¶è¯»å–ä¿¡æ¯
+//å½“å­¦å·æˆ–è€…å§“åä¸å­˜åœ¨æ—¶ï¼Œè¿”å›0ï¼Œå¦åˆ™è¿”å›1
 template<typename T>
-int copyInfo(string info,multimap<string,string> & x,vector<T> & y)    //yÎªĞèÒª¶ÁÈ¡µÄĞÅÏ¢;ÓÃvector±£´æÔ­ÒòÊÇ·ÀÖ¹ÓĞ¶à¸ö¶ÔÏó
+int copyInfo(string info,multimap<string,string> & x,vector<T> & y)    //yä¸ºéœ€è¦è¯»å–çš„ä¿¡æ¯;ç”¨vectorä¿å­˜åŸå› æ˜¯é˜²æ­¢æœ‰å¤šä¸ªå¯¹è±¡
 {
     int num=x.count(info);
     if(num==0) return 0;
     multimap<string,string>::iterator it=x.find(info);
     for(int i=0;i<num;i++)
     {
-        string posi=(*it).second;    //µÃµ½ĞÅÏ¢µÄÆ«ÒÆÁ¿,ÎÄ¼ş¾ø¶ÔµØÖ·&Æ«ÒÆÁ¿
+        string posi=(*it).second;    //å¾—åˆ°ä¿¡æ¯çš„åç§»é‡,æ–‡ä»¶ç»å¯¹åœ°å€&åç§»é‡
         string a(posi,0,posi.find('&')),b(posi,posi.find('&')+1,posi.size()-posi.find('&')-1);
         fstream f(a,ios::binary|ios::in);
-        f.seekg(long(sizeof(T)*atoi(b.c_str())),ios::beg);      //Æ«ÒÆµ½¶ÔÓ¦Î»ÖÃ
+        f.seekg(long(sizeof(T)*atoi(b.c_str())),ios::beg);      //åç§»åˆ°å¯¹åº”ä½ç½®
         T temp;
-        f.read((char*)&temp,sizeof(T));      //¶ÁÈ¡ĞÅÏ¢
+        f.read((char*)&temp,sizeof(T));      //è¯»å–ä¿¡æ¯
         y.push_back(temp);
         it++;
         f.close();
@@ -125,14 +307,14 @@ int copyInfo(string info,multimap<string,string> & x,vector<T> & y)    //yÎªĞèÒª
     return 1;
 }
 
-//¸ù¾İÑ§ºÅ»òÕßĞÕÃû£¬°ÑĞŞ¸ÄºóµÄyĞ´Èë¶ÔÓ¦Î»ÖÃ
-//µ±ĞÕÃû»òÕßÑ§ºÅ²»´æÔÚÊ±£¬·µ»Ø0£»·ñÔò·µ»Ø1£»
+//æ ¹æ®å­¦å·æˆ–è€…å§“åï¼ŒæŠŠä¿®æ”¹åçš„yå†™å…¥å¯¹åº”ä½ç½®
+//å½“å§“åæˆ–è€…å­¦å·ä¸å­˜åœ¨æ—¶ï¼Œè¿”å›0ï¼›å¦åˆ™è¿”å›1ï¼›
 template<typename T>
 int modifyInfo(string info,multimap<string,string> & x,const T & y)
 {
     if(x.count(info)==0) return 0;
     multimap<string,string>::iterator it=x.find(info);
-    string posi=(*it).second;    //µÃµ½ĞÅÏ¢µÄÆ«ÒÆÁ¿,ÎÄ¼ş¾ø¶ÔµØÖ·&Æ«ÒÆÁ¿
+    string posi=(*it).second;    //å¾—åˆ°ä¿¡æ¯çš„åç§»é‡,æ–‡ä»¶ç»å¯¹åœ°å€&åç§»é‡
     string a(posi,0,posi.find('&')),b(posi,posi.find('&')+1,posi.size()-posi.find('&')-1);
     fstream f(a,ios::binary|ios::out);
     f.seekp(long(sizeof(T)*atoi(b.c_str())),ios::beg);
@@ -141,22 +323,22 @@ int modifyInfo(string info,multimap<string,string> & x,const T & y)
     return 1;
 }
 
-//¸ù¾İÑ§ºÅ»òÕßĞÕÃûÉ¾³ıÄ³¶ÔÏóµÄË÷ÒıĞÅÏ¢
+//æ ¹æ®å­¦å·æˆ–è€…å§“ååˆ é™¤æŸå¯¹è±¡çš„ç´¢å¼•ä¿¡æ¯
 template<typename T>
 void deleteInfo(string info,multimap<string,string> & x,string file_name)
 {
     fstream f(file_name,ios::binary|ios::out|ios::trunc);
     x.erase(info);
-    multimap<string,string>::iterator it=x.begin();    //½«ĞŞ¸ÄºóµÄË÷ÒıĞÅÏ¢ÖØĞÂĞ´ÈëÎÄ¼ş
+    multimap<string,string>::iterator it=x.begin();    //å°†ä¿®æ”¹åçš„ç´¢å¼•ä¿¡æ¯é‡æ–°å†™å…¥æ–‡ä»¶
     for(;it!=x.end();it++)
     {
         Find temp((*it).first,(*it).second);
         f.write((char*)&temp,sizeof(temp));
     }
-    f.close();         //Ë÷ÒıĞÅÏ¢ÔÚÎÄ¼şÖĞÉ¾³ıÍê±Ï
+    f.close();         //ç´¢å¼•ä¿¡æ¯åœ¨æ–‡ä»¶ä¸­åˆ é™¤å®Œæ¯•
 }
 
-//Ôö¼ÓĞÅÏ¢£¬Ö±½ÓÔÚÎÄ¼şºó×·¼Ó,²¢·µ»Ø¸ÃĞÅÏ¢Æ«ÒÆÁ¿£¨ÀıÈç¸ÃĞÅÏ¢Ç°ÃæÒÑ¾­ÓĞ17¸öĞÅÏ¢£¬Ôò·µ»Ø18£©
+//å¢åŠ ä¿¡æ¯ï¼Œç›´æ¥åœ¨æ–‡ä»¶åè¿½åŠ ,å¹¶è¿”å›è¯¥ä¿¡æ¯åç§»é‡ï¼ˆä¾‹å¦‚è¯¥ä¿¡æ¯å‰é¢å·²ç»æœ‰17ä¸ªä¿¡æ¯ï¼Œåˆ™è¿”å›18ï¼‰
 template<typename T>
 int addInfo(const T & info,string file_name)
 {
@@ -167,8 +349,8 @@ int addInfo(const T & info,string file_name)
 	return value;
 }
 
-//Ôö¼ÓË÷ÒıĞÅÏ¢
-void addIndex(string key,string value,multimap<string,string> & x,string file_name)     //file_nameÎªË÷ÒıÎÄ¼ş
+//å¢åŠ ç´¢å¼•ä¿¡æ¯
+void addIndex(string key,string value,multimap<string,string> & x,string file_name)     //file_nameä¸ºç´¢å¼•æ–‡ä»¶
 {
     x.insert(make_pair(key,value));
     Find temp(key,value);
@@ -177,62 +359,62 @@ void addIndex(string key,string value,multimap<string,string> & x,string file_na
     f.close();
 }
 
-//Ôö¼ÓÑ§Éú¡¢½ÌÊ¦¡¢½ÌÎñÔ±ÈËÔ±ĞÅÏ¢
-//ĞèÒªÔÚÊı¾İÎÄ¼şºÍË÷ÒıÎÄ¼şÀï×·¼ÓĞÅÏ¢
-//ĞèÒªÌá¹©ÈËÔ±ĞÅÏ¢£¬¶ÔÓ¦µÄË÷Òı¶ÔÏó£¬ÈËÔ±ĞÅÏ¢ÎÄ¼şÃû£¬Ë÷ÒıĞÅÏ¢ÎÄ¼şÃû
-//ÓÉÓÚÓĞÒÔĞÕÃûÎªÖ÷µ¼ºÍÒÔÑ§ºÅÎªÖ÷µ¼µÄÎÄ¼ş£¬ËùÒÔĞèÒªÁ½¸öË÷ÒıÎÄ¼ş
+//å¢åŠ å­¦ç”Ÿã€æ•™å¸ˆã€æ•™åŠ¡å‘˜äººå‘˜ä¿¡æ¯
+//éœ€è¦åœ¨æ•°æ®æ–‡ä»¶å’Œç´¢å¼•æ–‡ä»¶é‡Œè¿½åŠ ä¿¡æ¯
+//éœ€è¦æä¾›äººå‘˜ä¿¡æ¯ï¼Œå¯¹åº”çš„ç´¢å¼•å¯¹è±¡ï¼Œäººå‘˜ä¿¡æ¯æ–‡ä»¶åï¼Œç´¢å¼•ä¿¡æ¯æ–‡ä»¶å
+//ç”±äºæœ‰ä»¥å§“åä¸ºä¸»å¯¼å’Œä»¥å­¦å·ä¸ºä¸»å¯¼çš„æ–‡ä»¶ï¼Œæ‰€ä»¥éœ€è¦ä¸¤ä¸ªç´¢å¼•æ–‡ä»¶
 template<typename T>
 void addPerson(const T & info,multimap<string,string> x2,multimap<string,string> x3,string file_name1,string file_name2,string file_name3)
 {
-    int num=addInfo(info,file_name1);   //µÃµ½Æ«ÒÆÁ¿
+    int num=addInfo(info,file_name1);   //å¾—åˆ°åç§»é‡
     addIndex(info.name,file_name1+"&"+to_string(num),x2,file_name2);
     addIndex(info.number,file_name1+"&"+to_string(num),x3,file_name3);
 }
 
-//Ç°Ìá£ºÑ§ÉúÑ¡¿Î³É¹¦
-//ÔÚ¶ÔÓ¦¿Î³ÌÏÂÔö¼ÓĞÅÏ¢£¬²¢¸üĞÂ¿Î³ÌË÷ÒıĞÅÏ¢£»¸ü¸ÄÑ§Éú¸öÈËĞÅÏ¢£¬¸üĞÂÎÄ¼ş
-//ĞèÒªÌá¹©Ñ§Éú¸öÈËĞÅÏ¢£¬Ñ§ºÅË÷Òı¶ÔÏó£¬¿Î³ÌÃû×Ö£¬¿Î³ÌË÷Òı¶ÔÏó£¬¿Î³ÌĞÅÏ¢ÎÄ¼ş£¬Ë÷ÒıĞÅÏ¢ÎÄ¼şÃû
-//ÓÉÓÚÓĞÒÔĞÕÃûÎªÖ÷µ¼ºÍÒÔÑ§ºÅÎªÖ÷µ¼µÄÎÄ¼ş£¬ËùÒÔĞèÒªÁ½¸öË÷ÒıÎÄ¼ş
+//å‰æï¼šå­¦ç”Ÿé€‰è¯¾æˆåŠŸ
+//åœ¨å¯¹åº”è¯¾ç¨‹ä¸‹å¢åŠ ä¿¡æ¯ï¼Œå¹¶æ›´æ–°è¯¾ç¨‹ç´¢å¼•ä¿¡æ¯ï¼›æ›´æ”¹å­¦ç”Ÿä¸ªäººä¿¡æ¯ï¼Œæ›´æ–°æ–‡ä»¶
+//éœ€è¦æä¾›å­¦ç”Ÿä¸ªäººä¿¡æ¯ï¼Œå­¦å·ç´¢å¼•å¯¹è±¡ï¼Œè¯¾ç¨‹åå­—ï¼Œè¯¾ç¨‹ç´¢å¼•å¯¹è±¡ï¼Œè¯¾ç¨‹ä¿¡æ¯æ–‡ä»¶ï¼Œç´¢å¼•ä¿¡æ¯æ–‡ä»¶å
+//ç”±äºæœ‰ä»¥å§“åä¸ºä¸»å¯¼å’Œä»¥å­¦å·ä¸ºä¸»å¯¼çš„æ–‡ä»¶ï¼Œæ‰€ä»¥éœ€è¦ä¸¤ä¸ªç´¢å¼•æ–‡ä»¶
 void addCourse(const Student & info,multimap<string,string> x1,string cou_name,multimap<string,string>& x2,multimap<string,string> &x3,string file_name1,string file_name2.string file_name3)
 {
-    fstream f(file_name1,ios::in|ios::binary);    //´ò¿ªÎÄ¼ş£¬¶ÁÈ¡¿Î³ÌĞÅÏ¢
+    fstream f(file_name1,ios::in|ios::binary);    //æ‰“å¼€æ–‡ä»¶ï¼Œè¯»å–è¯¾ç¨‹ä¿¡æ¯
     Course temp;
     f.read((char*)&temp,sizeof(Course)); f.close();
     temp.stu_name=info.name,temp.stu_number=info.number;
-    info.transCourse(temp);   //ĞŞ¸ÄÑ§Éú¿Î³ÌĞÅÏ¢
-    modifyInfo(info.number,x1,info);  //ĞŞ¸Äµ½Ñ§ÉúÎÄ¼şÖĞ
-    int num=addInfo(temp,file_name1); //ĞŞ¸Ä¿Î³ÌÎÄ¼şĞÅÏ¢
+    info.transCourse(temp);   //ä¿®æ”¹å­¦ç”Ÿè¯¾ç¨‹ä¿¡æ¯
+    modifyInfo(info.number,x1,info);  //ä¿®æ”¹åˆ°å­¦ç”Ÿæ–‡ä»¶ä¸­
+    int num=addInfo(temp,file_name1); //ä¿®æ”¹è¯¾ç¨‹æ–‡ä»¶ä¿¡æ¯
     addIndex(info.name,file_name1+"&"+to_string(num),x2,file_name2);
     addIndex(info.number,file_name1+"&"+to_string(num),x3,file_name3);
 }
 
 
-//ÅĞ¶ÏÕËºÅÊÇ·ñ´æÔÚ£¬´æÔÚÔò·µ»ØÃÜÂë£¬·ñÔò·µ»Ø¿Õ×Ö·û´®
-//Í¨¹ıÑ§ºÅ»òÕßĞÕÃûÕÒµ½Ñ§ÉúĞÅÏ¢±í£¬¶Á³öÕËºÅÃÜÂëĞÅÏ¢
-//º¯ÊıĞèÒªÌá¹©ÓÃ»§µÇÂ¼µÄÕËºÅÒÔ¼°¶ÔÓ¦µÄmultimap¶ÔÏó£¬ÆäÖĞ¸Ãº¯ÊıÖ»´¦ÀíÒ»¸öË÷Òı¶ÔÏó
+//åˆ¤æ–­è´¦å·æ˜¯å¦å­˜åœ¨ï¼Œå­˜åœ¨åˆ™è¿”å›å¯†ç ï¼Œå¦åˆ™è¿”å›ç©ºå­—ç¬¦ä¸²
+//é€šè¿‡å­¦å·æˆ–è€…å§“åæ‰¾åˆ°å­¦ç”Ÿä¿¡æ¯è¡¨ï¼Œè¯»å‡ºè´¦å·å¯†ç ä¿¡æ¯
+//å‡½æ•°éœ€è¦æä¾›ç”¨æˆ·ç™»å½•çš„è´¦å·ä»¥åŠå¯¹åº”çš„multimapå¯¹è±¡ï¼Œå…¶ä¸­è¯¥å‡½æ•°åªå¤„ç†ä¸€ä¸ªç´¢å¼•å¯¹è±¡
 template<typename T>
 string openAccount(string ID,const multimap<string,string> & x) {
-    int flag=x.count(ID);      //¼ì²éÕË»§ÊÇ·ñ´æÔÚ
-    if(flag==0) return "\0";     //ÕË»§²»´æÔÚÖ±½Ó·µ»Ø¿Õ×Ö·û´®
+    int flag=x.count(ID);      //æ£€æŸ¥è´¦æˆ·æ˜¯å¦å­˜åœ¨
+    if(flag==0) return "\0";     //è´¦æˆ·ä¸å­˜åœ¨ç›´æ¥è¿”å›ç©ºå­—ç¬¦ä¸²
     multimap<string,string>::iterator it=x.find(ID);
-    string posi=(*it).second;    //µÃµ½ĞÅÏ¢µÄÆ«ÒÆÁ¿,ÎÄ¼ş¾ø¶ÔµØÖ·&Æ«ÒÆÁ¿
+    string posi=(*it).second;    //å¾—åˆ°ä¿¡æ¯çš„åç§»é‡,æ–‡ä»¶ç»å¯¹åœ°å€&åç§»é‡
     string a(posi,0,posi.find('&')),b(posi,posi.find('&')+1,posi.size()-posi.find('&')-1);
     fstream f(a,ios::binary|ios::in);
-    f.seekg(long(sizeof(T)*atoi(b.c_str())),ios::beg);      //Æ«ÒÆµ½¶ÔÓ¦Î»ÖÃ
+    f.seekg(long(sizeof(T)*atoi(b.c_str())),ios::beg);      //åç§»åˆ°å¯¹åº”ä½ç½®
 	T temp;
-	f.read((char*)&temp,sizeof(T));   //¶ÁÈ¡ĞÅÏ¢
+	f.read((char*)&temp,sizeof(T));   //è¯»å–ä¿¡æ¯
 	f.close();
 	return temp.password;
 }
 
-//¶ÁÈ¡Õû¸öÎÄ¼şµÄĞÅÏ¢
-//´«ÈëÎÄ¼ş¼ĞµÄÃû³Æ
+//è¯»å–æ•´ä¸ªæ–‡ä»¶çš„ä¿¡æ¯
+//ä¼ å…¥æ–‡ä»¶å¤¹çš„åç§°
 template<typename T>
 int copyAllInfo(string file_name,vector<T> & x)
 {
     fstream f(file_name,ios::binary|ios::in);
     f.seekg(0,ios::end);
-    long End=f.tellg();    //»ñÈ¡Ä©Î»ÖÃ
+    long End=f.tellg();    //è·å–æœ«ä½ç½®
     f.seekg(0,ios::beg);
     for(;f.tellg()!=End;)
     {
@@ -240,11 +422,11 @@ int copyAllInfo(string file_name,vector<T> & x)
         f.read((char*)&temp,sizeof(T));
         x.push_back(temp);
     }
-    f.close();    //¶ÁÈ¡ÍêÈ«²¿ĞÅÏ¢
+    f.close();    //è¯»å–å®Œå…¨éƒ¨ä¿¡æ¯
 }
 
 /*
-//ÑéÖ¤ÕËºÅÃÜÂë
+//éªŒè¯è´¦å·å¯†ç 
 template<typename T>
 int checkAccount(string password, vector<T>& y) {
 	if (y.empty())return -1;
@@ -253,5 +435,5 @@ int checkAccount(string password, vector<T>& y) {
 }
 */
 
-//½ÌÊ¦Ôö¼ÓÑ¡¿ÎĞÅÏ¢¡ª¡ª>½ÌÎñÔ±Í¬Òâ¡ª¡ª¡ª¡ª¡··¢²¼Ñ¡¿ÎĞÅÏ¢¡ª¡ª¡ª¡ª¡·Ôö¼Ó½ÌÊ¦Ñ¡¿ÎµÄĞÅÏ¢¡¢Ñ§ÉúĞÅÏ¢
-//½ÌÊ¦Ôö¼ÓÒ»ÃÅ¿Î³ÌµÄÍ¬Ê±£¬Ó¦¸ÃÔÚÎÄ¼şÀïÌí¼ÓÉÏ¿Î³ÌĞÅÏ¢
+//æ•™å¸ˆå¢åŠ é€‰è¯¾ä¿¡æ¯â€”â€”>æ•™åŠ¡å‘˜åŒæ„â€”â€”â€”â€”ã€‹å‘å¸ƒé€‰è¯¾ä¿¡æ¯â€”â€”â€”â€”ã€‹å¢åŠ æ•™å¸ˆé€‰è¯¾çš„ä¿¡æ¯ã€å­¦ç”Ÿä¿¡æ¯
+//æ•™å¸ˆå¢åŠ ä¸€é—¨è¯¾ç¨‹çš„åŒæ—¶ï¼Œåº”è¯¥åœ¨æ–‡ä»¶é‡Œæ·»åŠ ä¸Šè¯¾ç¨‹ä¿¡æ¯
