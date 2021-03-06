@@ -169,6 +169,26 @@ int copyAllInfo(string file_name, vector<T>& x)
 	f.close();    //读取完全部信息
 }
 
+vector<string> split(const string& str, const string& pattern)
+{
+	vector<string> ret;
+	if (pattern.empty()) return ret;
+	size_t start = 0, index = str.find_first_of(pattern, 0);
+	while (index != str.npos)
+	{
+		if (start != index)
+			ret.push_back(str.substr(start, index - start));
+		start = index + 1;
+		index = str.find_first_of(pattern, start);
+	}
+	if (!str.substr(start).empty())
+		ret.push_back(str.substr(start));
+	return ret;
+}
+
+vector<string> getStuCourse(const Student& s) {
+	return split(s.course, "&");
+}
 /*
 //验证账号密码
 template<typename T>
