@@ -166,6 +166,7 @@ public:
 		openFind("Stu.dat", Stu_name);
 		openFind("Teacher.dat", Tea);
 		openFind("Admin.dat", Ad);
+		return 0;
 	}
 	int Logout();
 };
