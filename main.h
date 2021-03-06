@@ -26,13 +26,14 @@ multimap<string, string>Ad;
 class Course       //存储在课程文件中的课程类
 {
 public:
-    string cou_name;       //课程名字
-    string tea_name;       //授课老师姓名
-    string stu_name;      //学生姓名
-    string stu_number;    //学生学号
-    string position;       //授课地点
-    string time;          //授课时间
-    string mark;         //学生成绩
+
+	string stu_name;      //学生姓名
+	string stu_number;    //学生学号
+	string usual_grade;         //平时成绩
+	string final_grade;        //期末成绩
+	string overall_grade;       //总评成绩
+	Course(){}
+	Course(string stu_name,string stu_number,string usual_grade,string final_grade,string overall_grade):stu_name(stu_name),stu_number(stu_number),usual_grade(usual_grade),final_grade(final_grade),overall_grade(overall_grade){}
 };
 
 class User {
@@ -76,7 +77,7 @@ public:
 	{
 		number = Number, password = Password, name = Name, this->course = course;
 	}
-	void transCourse(const Course& x) { course += x.cou_name + "&"; }     //将课程类对象信息提取出来，并存在course数据中
+	void transCourse(const string& x) { course += x + "&"; }     //将课程类对象信息提取出来，并存在course数据中
 	void set_number(string number) { this->number = number; }
 	void set_pass(string password) { this->password = password; }
 	void set_name(string password) { this->name = name; }
@@ -147,18 +148,26 @@ string openAccount(string ID, const multimap<string, string>& x);
 template<typename T>
 int copyAllInfo(string file_name, vector<T>& x);
 
+//分割字符串
+vector<string> split(const string& str, const string& pattern);
+
+//分割学生的course
+vector<string> getStuCourse(const Student& s);
+
+//分割教师的course
+vector<string>getTeaCourse(const Teacher& tea);
 
 //----------------------------------OP类-------------------------------------------
 
 //主程序
 class SystemOp {
 public:
-    void init() {
-        openFind("Stu.dat", Stu);
-        openFind("Teacher.dat", Tea);
-        openFind("Admin.dat", Ad);
-    }
-    int Logout();
+	int init() {
+		openFind("Stu.dat", Stu_name);
+		openFind("Teacher.dat", Tea);
+		openFind("Admin.dat", Ad);
+	}
+	int Logout();
 };
 class StuOp
 {
@@ -170,12 +179,13 @@ public:
 class TeaOp
 {
 public:
-    int Tea_Login(string name, string password);                //老师登陆
-    int Tea_ReadClassScore();       //查询这门课程成绩
-    int Tea_SetPropotion();         //设置平均分-期末分比例
-    int Tea_ModifyScore();          //批改成绩;
-    int InputScore();
-    int CalScore();
+	int Tea_Login(string name, string password);				//老师登陆
+	vector<Course> Tea_ReadClassScore(string className);       //查询这门课程成绩
+	int Tea_SetPropotion();         //设置平均分-期末分比例
+	int Tea_ModifyScore();          //批改成绩;
+	int changeScore(vector<Student>s, double score);
+	int InputScore(string name, double score1, double score2);   //加入一个学生的course类对象
+	void getInfo(string filename);  //获取文件第一行课程信息
 };
 
 class AdminOp
