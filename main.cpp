@@ -169,7 +169,7 @@ int copyAllInfo(string file_name, vector<T>& x)
 	f.close();    //读取完全部信息
 }
 
-vector<string> split(const string& str, const string& pattern)
+vector<string> split(const string& str, const string& pattern)		//pattern为分隔符
 {
 	vector<string> ret;
 	if (pattern.empty()) return ret;
