@@ -1,13 +1,6 @@
 
-//
-//  edu.hpp
-//  4
-//
-//  Created by Takashii on 2021/3/4.
-//
 
-#ifndef edu_hpp
-#define edu_hpp
+#include"main.h"
 
 #include <stdio.h>
 #include<iostream>
@@ -16,33 +9,30 @@
 #include<vector>
 #include<cstdlib>
 #include<map>
-
+#include"main.h"
 using namespace std;
 
-multimap<string, string>Stu_number;
-multimap<string, string>Stu_name;
+
 multimap<string, string>Tea_number;
 multimap<string, string>Tea_name;
 multimap<string, string>Ad_number;
 multimap<string, string>Ad_name;
 
 
-class AdminOp
-{
-public:
-    int Admin_Login(string number,vector<Admini> & x)  //numberÊÇÓÃ»§ÊäÈëµÄ¹¤ºÅ  xÊÇµÇÂ½³É¹¦ºó·µ»ØÓÃ»§µÄ¸öÈËĞÅÏ¢
+    int Admin_Login(string number,vector<Admini> & x,string password)  //numberæ˜¯ç”¨æˆ·è¾“å…¥çš„å·¥å·  xæ˜¯ç™»é™†æˆåŠŸåè¿”å›ç”¨æˆ·çš„ä¸ªäººä¿¡æ¯
     {
-        string real_password = openAccount<Admini>(number, Ad_number);   //ÕâÀïµÄpasswordÊÇÓÃ»§ÊäÈëµÄÃÜÂë,ÓÃ½ÌÎñÔ±¹¤ºÅÀ´²é
-        if (real_password == "\0")return -1;		//ÓÃ»§²»´æÔÚ
-        else if (real_password == password)	//µÇÂ¼³É¹¦ µÇÂ½³É¹¦ºó°ÑÓÃ»§¸öÈËĞÅÏ¢Â¼Èë
+        string real_password = openAccount<Admini>(number, Ad_number);   //è¿™é‡Œçš„passwordæ˜¯ç”¨æˆ·è¾“å…¥çš„å¯†ç ,ç”¨æ•™åŠ¡å‘˜å·¥å·æ¥æŸ¥
+        if (real_password == "\0")return -1;		//ç”¨æˆ·ä¸å­˜åœ¨
+        else if (real_password == password)	//ç™»å½•æˆåŠŸ ç™»é™†æˆåŠŸåæŠŠç”¨æˆ·ä¸ªäººä¿¡æ¯å½•å…¥
         {
             copyInfo(number,Ad_number,x);
+            return 1;
         }
         else return 0;
     }
     int Admin_Modify()
     {
-        //ĞŞ¸ÄĞÅÏ¢¿ÉÒÔÔÚÇ°¶ËµÄ°´¼ü¿ØÖÆº¯ÊıÀïĞ´£¬Ö±½Ó°ÑÓÃ»§ĞŞ¸Äºó¶ò¶ÔÏóĞ´µÀÀà¶ÔÏóÖĞ£¬ÔÙÍ¨¹ımodifyInfo()º¯ÊıĞ´µ½ÎÄ¼şÀï
+        //ä¿®æ”¹ä¿¡æ¯å¯ä»¥åœ¨å‰ç«¯çš„æŒ‰é”®æ§åˆ¶å‡½æ•°é‡Œå†™ï¼Œç›´æ¥æŠŠç”¨æˆ·ä¿®æ”¹åå„å¯¹è±¡å†™é“ç±»å¯¹è±¡ä¸­ï¼Œå†é€šè¿‡modifyInfo()å‡½æ•°å†™åˆ°æ–‡ä»¶é‡Œ
     }
     int Admin_Search()
     {
@@ -51,16 +41,16 @@ public:
         int SearchCourse();
         return 0;
     };
-    int SearchStu_number(string number,vector<Student> & x)    //°´Ñ§ºÅËÑË÷Ñ§ÉúĞÅÏ¢ Ç°¶ËÓÃ»§ÊäÈëµÄÑ§ºÅ´«Èënumber¶ÔÏóÖĞ
+    int SearchStu_number(string number,vector<Student> & x)    //æŒ‰å­¦å·æœç´¢å­¦ç”Ÿä¿¡æ¯ å‰ç«¯ç”¨æˆ·è¾“å…¥çš„å­¦å·ä¼ å…¥numberå¯¹è±¡ä¸­
     {
-        //x´æ´¢Ñ§ÉúĞÅÏ¢
-        int flag=copyInfo(number,Ad_number,x);  //Ñ§ÉúĞÅÏ¢´æÔÚxÖĞ£¬¹©Ç°¶ËÊ¹ÓÃ
-        return flag;   //flagÎª1±íÊ¾ËÑË÷³É¹¦£¬·´Ö®Ê§°Ü
+        //xå­˜å‚¨å­¦ç”Ÿä¿¡æ¯
+        int flag=copyInfo(number,Ad_number,x);  //å­¦ç”Ÿä¿¡æ¯å­˜åœ¨xä¸­ï¼Œä¾›å‰ç«¯ä½¿ç”¨
+        return flag;   //flagä¸º1è¡¨ç¤ºæœç´¢æˆåŠŸï¼Œåä¹‹å¤±è´¥
     }
-    int SearchStu_name(string name,vector<Student> & x)      //°´Ãû×ÖËÑË÷Ñ§ÉúÃû×Ö    Ç°¶ËÓÃ»§ÊäÈëµÄĞÕÃû´«Èëname¶ÔÏóÖĞ
+    int SearchStu_name(string name,vector<Student> & x)      //æŒ‰åå­—æœç´¢å­¦ç”Ÿåå­—    å‰ç«¯ç”¨æˆ·è¾“å…¥çš„å§“åä¼ å…¥nameå¯¹è±¡ä¸­
     {
-        int flag=copyInfo(name,Ad_name,x);  //Ñ§ÉúĞÅÏ¢´æÔÚxÖĞ£¬¹©Ç°¶ËÊ¹ÓÃ
-        return flag;   //flagÎª1±íÊ¾ËÑË÷³É¹¦£¬·´Ö®Ê§°Ü
+        int flag=copyInfo(name,Ad_name,x);  //å­¦ç”Ÿä¿¡æ¯å­˜åœ¨xä¸­ï¼Œä¾›å‰ç«¯ä½¿ç”¨
+        return flag;   //flagä¸º1è¡¨ç¤ºæœç´¢æˆåŠŸï¼Œåä¹‹å¤±è´¥
     }
     int SearchTea_number(string number,vector<Teacher> &x)
     {
@@ -72,47 +62,47 @@ public:
         int flag=copyInfo(name,Tea_name,x);
         return flag;
     }
-    int SearchCourse(string name,map<string,vector<Course>> &x,vector<string> & y)     //xÖĞ¼ÇÂ¼ÁË¿Î³ÌÎÄ¼şÃûºÍ¿Î³ÌĞÅÏ¢µÄÒ»Ò»¶ÔÓ¦ y¼ÇÂ¼ÁËËùÓĞ¿Î³ÌÎÄ¼şÃû
+    int SearchCourse(string name,map<string,vector<Course>> &x,vector<string> & y)     //xä¸­è®°å½•äº†è¯¾ç¨‹æ–‡ä»¶åå’Œè¯¾ç¨‹ä¿¡æ¯çš„ä¸€ä¸€å¯¹åº” yè®°å½•äº†æ‰€æœ‰è¯¾ç¨‹æ–‡ä»¶å
     {
         fstream f("Course//"+name+"//record.dat",ios::binary|ios::in);
         f.seekg(0,ios::end);
-        long End=f.tellg(); f.seekg(0,ios::begin);
+        long End=f.tellg(); f.seekg(0,ios::beg);
         for(;f.tellg()!=End;)
         {
             string temp;
-            f.read((char*)&temp,sizeof(string));     //½«ËùÓĞ¿Î³ÌÎÄ¼şÃû¶ÁÈëyÖĞ
+            f.read((char*)&temp,sizeof(string));     //å°†æ‰€æœ‰è¯¾ç¨‹æ–‡ä»¶åè¯»å…¥yä¸­
             y.push_back(temp);
         }
-        if(y.size()==0) return 0;     //Ã»ÓĞ¿Î³Ì°à¼¶
-        f.close();      //¶ÁÈ¡Íê±Ï£¬½ÓÏÂÀ´ÔÙÒÀ´Î¶ÁÈ¡È«²¿¿Î³ÌÎÄ¼ş
+        if(y.size()==0) return 0;     //æ²¡æœ‰è¯¾ç¨‹ç­çº§
+        f.close();      //è¯»å–å®Œæ¯•ï¼Œæ¥ä¸‹æ¥å†ä¾æ¬¡è¯»å–å…¨éƒ¨è¯¾ç¨‹æ–‡ä»¶
 
         for(int i=0;i<y.size();i++)
         {
             string temp="Course//"+name+"//"+y[i]+".dat";
             vector<Course> temp_cou;
-            copyAllInfo(temp,temp_cou);    //½«¶ÔÓ¦¿Î³ÌÎÄ¼şÖĞĞÅÏ¢È«²¿¶ÁÈëtemp_couÈİÆ÷ÖĞ£¬ÔÙ±£´æÈëxÖĞ
-            x[name+"_"+y[i]]=temp_cou;  //¶ÁÈ¡Íê±Ï  key=¡°Âí¿ËË¼Ö÷ÒåÊµ¼ù_ÕÅÃÈ5°à"
+            copyAllInfo(temp,temp_cou);    //å°†å¯¹åº”è¯¾ç¨‹æ–‡ä»¶ä¸­ä¿¡æ¯å…¨éƒ¨è¯»å…¥temp_couå®¹å™¨ä¸­ï¼Œå†ä¿å­˜å…¥xä¸­
+            x[name+"_"+y[i]]=temp_cou;  //è¯»å–å®Œæ¯•  key=â€œé©¬å…‹æ€ä¸»ä¹‰å®è·µ_å¼ èŒ5ç­"
         }
         return 0;
     }
-    int multi_Search(string cou_name,string tea_name,map<string,vector<Course>> &x,vector<string> &y)  //ÔÚ½ÌÎñÔ±ËÑË÷¿Î³ÌĞÅÏ¢Ê±£¬Ö§³ÖÁ½¸ö¹Ø¼ü×Ö¡ª¡ª¡ª¡ª¡·¿Î³ÌÃû×Ö ÀÏÊ¦
+    int multi_Search(string cou_name,string tea_name,map<string,vector<Course>> &x,vector<string> &y)  //åœ¨æ•™åŠ¡å‘˜æœç´¢è¯¾ç¨‹ä¿¡æ¯æ—¶ï¼Œæ”¯æŒä¸¤ä¸ªå…³é”®å­—â€”â€”â€”â€”ã€‹è¯¾ç¨‹åå­— è€å¸ˆ
     {
         fstream f("Course//"+cou_name+"//record.dat",ios::binary|ios::in);
         f.seekg(0,ios::end);
-        long End=f.tellg(); f.seekg(0,ios::begin);
+        long End=f.tellg(); f.seekg(0,ios::beg);
         for(;f.tellg()!=End;)
         {
             string temp;
-            f.read((char*)&temp,sizeof(string));     //½«ËùÓĞ¿Î³ÌÎÄ¼şÃû¶ÁÈëyÖĞ
+            f.read((char*)&temp,sizeof(string));     //å°†æ‰€æœ‰è¯¾ç¨‹æ–‡ä»¶åè¯»å…¥yä¸­
             y.push_back(temp);
         }
-        if(y.size()==0) return 0;     //Ã»ÓĞ¿Î³Ì°à¼¶
+        if(y.size()==0) return 0;     //æ²¡æœ‰è¯¾ç¨‹ç­çº§
         f.close();
 
-        //¿ªÊ¼´Ó¿Î³ÌÃû×ÖÖĞÑ°ÕÒºÍÀÏÊ¦Ãû×ÖÏàÍ¬µÄ¿Î³ÌÎÄ¼ş
+        //å¼€å§‹ä»è¯¾ç¨‹åå­—ä¸­å¯»æ‰¾å’Œè€å¸ˆåå­—ç›¸åŒçš„è¯¾ç¨‹æ–‡ä»¶
         for(int i=0;i<y.size();i++)
         {
-            if(y[i].substr(0,tea_name.size())==tea_name)    //È·ÈÏÊÇ²éÕÒµÄÀÏÊ¦
+            if(y[i].substr(0,tea_name.size())==tea_name)    //ç¡®è®¤æ˜¯æŸ¥æ‰¾çš„è€å¸ˆ
             {
                 vector<Course> temp_cou;
                 copyAllInfo("Course//"+cou_name+"//"+y[i]+".dat",temp_cou);
@@ -121,5 +111,5 @@ public:
         }
         return 1;
     }
-};
-#endif /* edu_hpp */
+
+
