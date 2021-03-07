@@ -7,9 +7,9 @@
 #include"main.h"
 using namespace std;
 
-void Student::transCourse(const Course& x,string cou_name)
+void Student::transCourse(const Course& x, string cou_name, string class_name)
 {
-    this->course += cou_name + "/" + x.overall_grade + "&";
+    this->course += cou_name + "/" + class_name + "/" + x.overall_grade + "&";
 }
 /*----功能函数-----*/
 //读取索引信息
@@ -124,7 +124,7 @@ void addCourse(Student& info, multimap<string, string> x1, string cou_name, mult
 	Course temp;
 	f.read((char*)&temp, sizeof(Course)); f.close();
 	temp.stu_name = info.name, temp.stu_number = info.number;
-	info.transCourse(temp,cou_name);   //修改学生课程信息
+	info.transCourse(temp,cou_name，class_name);   //修改学生课程信息
 	modifyInfo(info.number, x1, info);  //修改到学生文件中
 	int num = addInfo(temp, file_name1); //修改课程文件信息
 	addIndex(info.name, file_name1 + "&" + to_string(num), x2, file_name2);
