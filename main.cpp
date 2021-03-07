@@ -9,7 +9,7 @@ using namespace std;
 
 void Student::transCourse(const Course& x,string cou_name)
 {
-    this->course += cou_name + "/" + x.overall_grade;
+    this->course += cou_name + "/" + x.overall_grade + "&";
 }
 /*----功能函数-----*/
 //读取索引信息
