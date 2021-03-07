@@ -56,7 +56,7 @@ public:
 	{
 		number = Number, password = Password, name = Name, grade = Grade, college = College, major = Major, this->Class = Class, this->course = course;
 	}
-	void transCourse(const Course& x,string cou_name);     //将课程类对象信息提取出来，并存在course数据中
+	void transCourse(const Course& x,string cou_name,string class_name);     //将课程类对象信息提取出来，并存在course数据中
 	void set_number(string number) { this->number = number; }
 	void set_pass(string password) { this->password = password; }
 	void set_name(string password) { this->name = name; }
