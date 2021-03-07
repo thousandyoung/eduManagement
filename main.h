@@ -50,7 +50,7 @@ public:
 	string college;  //学院
 	string major;    //专业
 	string Class;    //班级
-	string course;   //学生全部课程信息。以 课程名字/授课地点/授课时间/授课老师姓名/成绩&课程姓名/授课地点/.....
+	string course;   //学生全部课程信息。以 课程名字/总评成绩/课程名字/总评成绩...
 	Student() { ; }
 	Student(string Number, string Password, string Name, string Grade, string College, string Major, string course = "\0")
 	{
