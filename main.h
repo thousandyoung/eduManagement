@@ -181,12 +181,13 @@ class TeaOp
 {
 public:
 	int Tea_Login(string name, string password);				//老师登陆
-	vector<Course> Tea_ReadClassScore(string className);       //查询这门课程成绩
-	int Tea_SetPropotion();         //设置平均分-期末分比例
-	int Tea_ModifyScore();          //批改成绩;
-	int changeScore(vector<Student>s, double score);
-	int InputScore(string name, double score1, double score2);   //加入一个学生的course类对象
-	void getInfo(string filename);  //获取文件第一行课程信息
+	vector<string>getTeaCourse(const Teacher& tea);				//读取教师所教课程（返回分割后的course）
+	void getInfo(string filename);								//设置当前要访问的课程，并获取文件第一行课程信息
+	vector<Course> Tea_ReadClassScore();						//查询当前访问课程成绩
+	double getAverageScore(const vector<Course>&);				//返回学生平均成绩
+	void Tea_SetPropotion(double proportion);					//设置当前课程平均分-期末分比例
+	int changeScore(vector<Student>s, double score);			//修改学生文件中course（成绩）
+	int InputScore(string name, double score1, double score2);   //修改学生成绩
 };
 
 class AdminOp
