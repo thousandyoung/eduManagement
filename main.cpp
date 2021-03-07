@@ -118,7 +118,7 @@ void addPerson(const T& info, multimap<string, string> x2, multimap<string, stri
 //在对应课程下增加信息，并更新课程索引信息；更改学生个人信息，更新文件
 //需要提供学生个人信息，学号索引对象，课程名字，课程索引对象，课程信息文件，索引信息文件名
 //由于有以姓名为主导和以学号为主导的文件，所以需要两个索引文件
-void addCourse(const Student& info, multimap<string, string> x1, string cou_name, multimap<string, string>& x2, multimap<string, string>& x3, string file_name1, string file_name2,string file_name3)
+void addCourse(Student& info, multimap<string, string> x1, string cou_name, multimap<string, string>& x2, multimap<string, string>& x3, string file_name1, string file_name2,string file_name3)
 {
 	fstream f(file_name1, ios::in | ios::binary);    //打开文件，读取课程信息
 	Course temp;
