@@ -136,9 +136,9 @@ void addPerson(const T& info, multimap<string, string> numberMap, string infoFil
 
 //前提：学生选课成功
 //对学生类中course进行修改，在张萌五班中加入该学生
-//需要提供学生个人信息，学号索引对象，课程名字，课程索引对象，课程信息文件，索引信息文件名
+//需要提供学生个人信息，学号索引对象，课程名字，班级名字
 // filename1 张萌五班
-void addCourse(Student& info, multimap<string, string> x1, string cou_name, string class_name, string file_name1);
+void addCourse(Student& info, multimap<string, string> x1, string cou_name, string class_name);
 //判断账号是否存在，存在则返回密码，否则返回空字符串
 //通过学号或者姓名找到学生信息表，读出账号密码信息
 //函数需要提供用户登录的账号以及对应的multimap对象，其中该函数只处理一个索引对象
