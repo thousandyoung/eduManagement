@@ -133,10 +133,10 @@ template<typename T>
 void addPerson(const T& info, multimap<string, string> x2, multimap<string, string> x3, string file_name1, string file_name2, string file_name3);
 
 //前提：学生选课成功
-//在对应课程下增加信息，并更新课程索引信息；更改学生个人信息，更新文件
+//对学生类中course进行修改，在张萌五班中加入该学生
 //需要提供学生个人信息，学号索引对象，课程名字，课程索引对象，课程信息文件，索引信息文件名
-//由于有以姓名为主导和以学号为主导的文件，所以需要两个索引文件
-void addCourse(const Student& info, multimap<string, string> x1, Course temp, multimap<string, string>& x2, multimap<string, string>& x3, string file_name1, string file_name2, string file_name3);
+// filename1 张萌五班
+void addCourse(Student& info, multimap<string, string> x1, string cou_name, string class_name, string file_name1);
 //判断账号是否存在，存在则返回密码，否则返回空字符串
 //通过学号或者姓名找到学生信息表，读出账号密码信息
 //函数需要提供用户登录的账号以及对应的multimap对象，其中该函数只处理一个索引对象
