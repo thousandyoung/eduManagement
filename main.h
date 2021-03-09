@@ -131,6 +131,8 @@ void addIndex(string key, string value, multimap<string, string>& x, string file
 //由于有以姓名为主导和以学号为主导的文件，所以需要两个索引文件
 template<typename T>
 void addPerson(const T& info, multimap<string, string> x2, multimap<string, string> x3, string file_name1, string file_name2, string file_name3);
+template<typename T>
+void addPerson(const T& info, multimap<string, string> numberMap, string infoFile, string indexFile);
 
 //前提：学生选课成功
 //对学生类中course进行修改，在张萌五班中加入该学生
