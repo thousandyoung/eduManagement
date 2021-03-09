@@ -113,23 +113,22 @@ void addPerson(const T& info, multimap<string, string> x2, multimap<string, stri
 	addIndex(info.name, file_name1 + "&" + to_string(num), x2, file_name2);
 	addIndex(info.number, file_name1 + "&" + to_string(num), x3, file_name3);
 }
-
 //前提：学生选课成功
-//在对应课程下增加信息，并更新课程索引信息；更改学生个人信息，更新文件
+//对学生类中course进行修改，在张萌五班中加入该学生
 //需要提供学生个人信息，学号索引对象，课程名字，课程索引对象，课程信息文件，索引信息文件名
-//由于有以姓名为主导和以学号为主导的文件，所以需要两个索引文件
-void addCourse(Student& info, multimap<string, string> x1, string cou_name, multimap<string, string>& x2, multimap<string, string>& x3, string file_name1, string file_name2,string file_name3)
+// filename1 张萌五班
+void addCourse(Student& info, multimap<string, string> x1, string cou_name, string class_name, string file_name1)
 {
-	fstream f(file_name1, ios::in | ios::binary);    //打开文件，读取课程信息
+	fstream f(file_name1, ios::in | ios::binary);    //打开文件
 	Course temp;
-	f.read((char*)&temp, sizeof(Course)); f.close();
-	temp.stu_name = info.name, temp.stu_number = info.number;
-	info.transCourse(temp,cou_name，class_name);   //修改学生课程信息
+    temp.stu_name = info.name; temp.stu_number = info.number;
+    temp.usual_grade = "None"; temp.final_grade = "None"; temp.overall_grade = "None";
+	info.transCourse(temp,cou_name,class_name);   //修改学生课程信息
 	modifyInfo(info.number, x1, info);  //修改到学生文件中
 	int num = addInfo(temp, file_name1); //修改课程文件信息
-	addIndex(info.name, file_name1 + "&" + to_string(num), x2, file_name2);
-	addIndex(info.number, file_name1 + "&" + to_string(num), x3, file_name3);
+	
 }
+
 
 
 //判断账号是否存在，存在则返回密码，否则返回空字符串
