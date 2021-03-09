@@ -135,7 +135,7 @@ void addCourse(Student& info, multimap<string, string> x1, string cou_name, stri
 //通过学号或者姓名找到学生信息表，读出账号密码信息
 //函数需要提供用户登录的账号以及对应的multimap对象，其中该函数只处理一个索引对象
 template<typename T>
-string openAccount(string ID, const multimap<string, string>& x) {
+string openAccount(string ID,  multimap<string, string>& x) {
 	int flag = x.count(ID);      //检查账户是否存在
 	if (flag == 0) return "\0";     //账户不存在直接返回空字符串
 	multimap<string, string>::iterator it = x.find(ID);
