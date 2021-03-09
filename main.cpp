@@ -121,23 +121,23 @@ void addPerson(const T& info, multimap<string, string> numberMap, string infoFil
     addIndex(info.number, infoFile + "&" + to_string(num), numberMap, indexFile);
 }
 
+
 //前提：学生选课成功
 //对学生类中course进行修改，在张萌五班中加入该学生
-//需要提供学生个人信息，学号索引对象，课程名字，课程索引对象，课程信息文件，索引信息文件名
+//需要提供学生个人信息，学号索引对象，课程名字，班级名字
 // filename1 张萌五班
-void addCourse(Student& info, multimap<string, string> x1, string cou_name, string class_name, string file_name1)
+void addCourse(Student& info, multimap<string, string> x1, string cou_name, string class_name)
 {
-	fstream f(file_name1, ios::in | ios::binary);    //打开文件
+	 //打开文件
 	Course temp;
+    string fileName = cou_name + "/" + class_name + ".dat";
     temp.stu_name = info.name; temp.stu_number = info.number;
     temp.usual_grade = "None"; temp.final_grade = "None"; temp.overall_grade = "None";
 	info.transCourse(temp,cou_name,class_name);   //修改学生课程信息
 	modifyInfo(info.number, x1, info);  //修改到学生文件中
-	int num = addInfo(temp, file_name1); //修改课程文件信息
+	int num = addInfo(temp, fileName); //修改课程文件信息
 	
 }
-
-
 
 //判断账号是否存在，存在则返回密码，否则返回空字符串
 //通过学号或者姓名找到学生信息表，读出账号密码信息
