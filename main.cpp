@@ -113,6 +113,14 @@ void addPerson(const T& info, multimap<string, string> x2, multimap<string, stri
 	addIndex(info.name, file_name1 + "&" + to_string(num), x2, file_name2);
 	addIndex(info.number, file_name1 + "&" + to_string(num), x3, file_name3);
 }
+// ADD TEA AND ADMIN
+template<typename T>
+void addPerson(const T& info, multimap<string, string> numberMap, string infoFile, string indexFile)
+{
+    int num = addInfo(info, infoFile);   //得到偏移量
+    addIndex(info.number, infoFile + "&" + to_string(num), numberMap, indexFile);
+}
+
 //前提：学生选课成功
 //对学生类中course进行修改，在张萌五班中加入该学生
 //需要提供学生个人信息，学号索引对象，课程名字，课程索引对象，课程信息文件，索引信息文件名
