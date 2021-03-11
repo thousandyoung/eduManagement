@@ -16,8 +16,8 @@ using namespace std;
 
 string class_name[10] = { "计科1班","计科2班","信安1班","信安2班","网工1班","网工2班","环院1班","环院2班","软件1班","软件1班" };
 string grade_name[4] = { "2017级","2018级","2019级","2020级" };
-string major_name[10] = { "计算机科学与技术","计算机科学与技术","信息安全","信息安全","网络工程","网络工程","环境安全","环境安全","软件专业","软件专业" };
-string college_name[10] = { "计算机科学与工程学院","计算机科学与工程学院","计算机科学与工程学院","计算机科学与工程学院","计算机科学与工程学院","计算机科学与工程学院","环境科学与工程学院","环境科学与工程学院","软件学院","软件学院" };
+string major_name[10] = { "计算机科学","计算机科学","信息安全","信息安全","网络工程","网络工程","环境安全","环境安全","软件专业","软件专业" };
+string college_name[10] = { "计算机学院","计算机学院","计算机学院","计算机学院","计算机学院","计算机学院","环境学院","环境学院","软件学院","软件学院" };
 string before_name[20] = { "赵", "钱", "孙", "李", "周", "吴", "郑", "王", "冯", "陈", "褚", "卫", "杨","余","卢","彭","万俟", "司马", "上官", "欧阳" };
 string after_name[140] = { "伟", "刚", "勇", "毅", "俊", "峰", "强", "军", "平", "保", "东", "文", "辉", "力", "明", "永", "健", "世", "广", "志", "义", "兴", "良", "海", "山", "仁", "波", "宁", "贵", "福", "生", "龙", "元", "全", "国", "胜", "学", "祥", "才", "发", "武", "新", "利", "清", "飞", "彬","富", "顺", "信", "子", "杰", "涛", "昌", "成", "康", "星", "光", "天", "达", "安", "岩", "中", "茂", "进", "林", "有", "坚", "和", "彪", "博", "诚", "先", "敬", "震", "振", "壮", "会", "思", "群", "豪", "心", "邦", "承", "乐", "绍", "功", "松", "善", "厚", "庆", "磊", "民", "友", "裕", "河", "哲", "江", "超", "浩", "亮", "政", "谦", "亨", "奇", "固", "之", "轮", "翰", "朗", "伯", "宏", "言", "若", "鸣", "朋", "斌", "梁", "栋", "维", "启", "克", "伦", "翔", "旭", "鹏", "泽", "晨", "辰", "士", "以", "建", "家", "致", "树", "炎", "德", "行", "时", "泰", "盛" };
 int index_class = -1;  //用到的班级数，最多只能生成10个班级文件
@@ -29,12 +29,33 @@ int index_num_tea = -1;
 
 string file_student = "Class\\";  //存储学生信息文件路径
 string file_course = "Course\\";  //存储课程信息文件路径
-string file_teacher = "teacher.dat";  //存储教师信息文件路径
-string file_admini = "admini.dat";    //存储教务员信息文件路径
+string file_teacher = "teacher";  //存储教师信息文件路径
+string file_admini = "admini";    //存储教务员信息文件路径
 string file_index = "index\\";       //存储索引文件路径
 
 string course_name[] = { "数据结构","数据结构","马克思实践","马克思实践","大学英语","大学英语" };
 string course_class[] = { "张威1班","张威2班","王萌1班","王萌2班","李雷1班","李雷2班" };
+
+string course_name[] = { "数据结构","数据结构","马克思实践","马克思实践","大学英语","大学英语" };
+string course_class[] = { "张威1班","张威2班","王萌1班","王萌2班","李雷1班","李雷2班" };
+
+
+string to_string(int x)
+{
+    vector<int> temp;
+    string s;
+    if(x==0) return "0";
+    while(x)
+    {
+        temp.push_back(x%10);
+        x=x/10;
+    }
+    for(int i=temp.size()-1;i>=0;i--)
+    {
+        s+=temp[i]+'0';
+    }
+    return s;
+}
 
 string getRandomNum(int& index_num)  //获取学号
 {
@@ -86,9 +107,10 @@ void addRandomClass()  //随机生成班级信息
 		x.set_number(getRandomNum(index_num));
 		x.set_name(getRandomName());
 		x.set_grade(temp_grade);
-		x.set_college(college_name[index_class]);
-		x.set_major(major_name[index_class]);
-		x.set_class(class_name[index_class]);
+		string x2(major_name[index_class]);
+		string x3(class_name[index_class]);
+		string x1(college_name[index_class]);
+		x.college=x1,x.major=x2,x.Class=x3;
 		x.set_pass("123456");  //设置初始密码
 		x.set_course("\0");
 
@@ -97,12 +119,12 @@ void addRandomClass()  //随机生成班级信息
 		int flag = rand() % 6;
 
 		Course temp;
-		string fileName = file_course + course_name[flag] + "/" + course_class[flag] + ".dat";
+		string fileName = file_course + course_name[flag] + "//" + course_class[flag] ;
 		temp.stu_name = x.name; temp.stu_number = x.number;
 		temp.usual_grade = "None"; temp.final_grade = "None"; temp.overall_grade = "None";
 		x.transCourse(temp, course_name[flag], course_class[flag]);   //修改学生课程信息
-		course_name[1];
 		addInfo(temp, fileName); //修改课程文件信息
+
 
 		//将学生信息添加进文件
 		addPerson(x, Stu_name, Stu_number, file_student + class_name[index_class], file_index + "Stu_name.dat", file_index + "Stu_number.dat");
@@ -119,10 +141,10 @@ void addRandomTeacher()
 	Admini y1;
 	y1.number = getRandomNum(index_num_tea), y1.password = "123456", y1.name = "韩梅梅";
 
-	addPerson(y1, Ad, file_admini, file_index + "Admini_index.dat");  //增加教务员信息
-	addPerson(x1, Tea, file_teacher , file_index + "Teacher_index.dat");  //增加教师信息
-	addPerson(x2, Tea, file_teacher , file_index + "Teacher_index.dat");  //增加教师信息
-	addPerson(x3, Tea, file_teacher , file_index + "Teacher_index.dat");  //增加教师信息
+	addPerson(y1, Ad, file_admini, file_index + "Admini_index");  //增加教务员信息
+	addPerson(x1, Tea, file_teacher , file_index + "Teacher_index");  //增加教师信息
+	addPerson(x2, Tea, file_teacher , file_index + "Teacher_index");  //增加教师信息
+	addPerson(x3, Tea, file_teacher , file_index + "Teacher_index");  //增加教师信息
 
 	//增加几个课程的文件
 	cou_info a1, a2, a3, a4, a5, a6;
@@ -132,12 +154,20 @@ void addRandomTeacher()
 	a4.cou_name = "马克思实践", a4.class_name = "王萌2班", a4.tea_name = "王萌", a4.position = "A2 306", a4.time = "周二第一第二节", a4.propotion = 0.5;
 	a5.cou_name = "大学英语", a5.class_name = "李雷1班", a5.tea_name = "李雷", a5.position = "A4 306", a5.time = "周三第一第二节", a5.propotion = 0.3;
 	a6.cou_name = "大学英语", a6.class_name = "李雷2班", a6.tea_name = "李雷", a6.position = "A4 306", a6.time = "周四第一第二节", a6.propotion = 0.3;
-	fstream f1(file_course + "数据结构//张威1班.dat", ios::in | ios::out | ios::binary); f1.write((char*)&a1, sizeof(a1)); f1.close();
-	fstream f2(file_course + "数据结构//张威2班.dat", ios::in | ios::out | ios::binary); f2.write((char*)&a2, sizeof(a2)); f2.close();
-	fstream f3(file_course + "马克思实践//王萌1班.dat", ios::in | ios::out | ios::binary); f3.write((char*)&a3, sizeof(a3)); f3.close();
-	fstream f4(file_course + "马克思实践//王萌2班.dat", ios::in | ios::out | ios::binary); f4.write((char*)&a4, sizeof(a4)); f4.close();
-	fstream f5(file_course + "大学英语/李雷1班.dat", ios::in | ios::out | ios::binary); f5.write((char*)&a5, sizeof(a5)); f5.close();
-	fstream f6(file_course + "大学英语//李雷2班.dat", ios::in | ios::out | ios::binary); f6.write((char*)&a6, sizeof(a6)); f6.close();
+	fstream f1(file_course + "数据结构//张威1班", ios::in | ios::out | ios::binary); f1.write((char*)&a1, sizeof(a1)); f1.close();
+	fstream f2(file_course + "数据结构//张威2班", ios::in | ios::out | ios::binary); f2.write((char*)&a2, sizeof(a2)); f2.close();
+	fstream f3(file_course + "马克思实践//王萌1班", ios::in | ios::out | ios::binary); f3.write((char*)&a3, sizeof(a3)); f3.close();
+	fstream f4(file_course + "马克思实践//王萌2班", ios::in | ios::out | ios::binary); f4.write((char*)&a4, sizeof(a4)); f4.close();
+	fstream f5(file_course + "大学英语/李雷1班", ios::in | ios::out | ios::binary); f5.write((char*)&a5, sizeof(a5)); f5.close();
+	fstream f6(file_course + "大学英语//李雷2班", ios::in | ios::out | ios::binary); f6.write((char*)&a6, sizeof(a6)); f6.close();
+}
+
+//注：记得给每个写文件操作函数加上 ios::in 否则重写文件
+
+int main() {
+	addRandomClass();
+	addRandomTeacher();
+	return 0;
 }
 
 //注：记得给每个写文件操作函数加上 ios::in 否则重写文件
