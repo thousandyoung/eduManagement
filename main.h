@@ -59,7 +59,7 @@ public:
 	void transCourse(const Course& x,string cou_name,string class_name);     //将课程类对象信息提取出来，并存在course数据中
 	void set_number(string number) { this->number = number; }
 	void set_pass(string password) { this->password = password; }
-	void set_name(string password) { this->name = name; }
+	void set_name(string name) { this->name = name; }
 	void set_grade(string grade) { this->grade = grade; }
 	void set_major(string major) { this->major = major; }
 	void set_course(string course) { this->course = course; }
@@ -80,7 +80,7 @@ public:
 	//void transCourse(const string& x) { course += x + "&"; }     //将课程类对象信息提取出来，并存在course数据中
 	void set_number(string number) { this->number = number; }
 	void set_pass(string password) { this->password = password; }
-	void set_name(string password) { this->name = name; }
+	void set_name(string name) { this->name = name; }
 	void set_course(string course) { this->course = course; }
 };
 
