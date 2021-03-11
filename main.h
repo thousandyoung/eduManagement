@@ -98,6 +98,14 @@ public:
 	Find() {}
 	Find(string a, string b):key(a),value(b){}
 };
+struct cou_info {
+	string cou_name;		//课程名字
+	string class_name;		//教学班名
+	string tea_name;		//授课老师姓名
+	string position;		//授课地点
+	string time;			//授课时间
+	double propotion;		//平时成绩比例
+}cur_course;
 //-----------------------------------------功能函数-----------------------------------
 
 
