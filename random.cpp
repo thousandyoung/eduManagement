@@ -6,136 +6,138 @@
 #include<vector>
 using namespace std;
 
-//¿Î³ÌµÄÊıÄ¿ºÍÀÏÊ¦¡¢½ÌÎñÔ±µÄÊıÁ¿¡¢°à¼¶ÊıÁ¿ÉÏÏŞÔİÊ±ÊÇÈ·¶¨µÄ
-//ÏÈµ÷ÓÃaddRandomTeacher()Éú³É¼¸¸öÀÏÊ¦¡¢½ÌÎñÔ±¡¢¿Î³ÌÎÄ¼şµÈĞÅÏ¢
-//È»ºó×î¶àµ÷ÓÃ10´ÎaddRandomClass()Éú³É10¸ö°à¼¶ĞÅÏ¢
-//ÎÄ¼ş´¢´æÂ·¾¶Ğ´ÔÚfile_class,file_indexÖĞ
-//»¹Î´µ÷ÊÔ
+//è¯¾ç¨‹çš„æ•°ç›®å’Œè€å¸ˆã€æ•™åŠ¡å‘˜çš„æ•°é‡ã€ç­çº§æ•°é‡ä¸Šé™æš‚æ—¶æ˜¯ç¡®å®šçš„
+//å…ˆè°ƒç”¨addRandomTeacher()ç”Ÿæˆå‡ ä¸ªè€å¸ˆã€æ•™åŠ¡å‘˜ã€è¯¾ç¨‹æ–‡ä»¶ç­‰ä¿¡æ¯
+//ç„¶åæœ€å¤šè°ƒç”¨10æ¬¡addRandomClass()ç”Ÿæˆ10ä¸ªç­çº§ä¿¡æ¯
+//æ–‡ä»¶å‚¨å­˜è·¯å¾„å†™åœ¨file_class,file_indexä¸­
+//è¿˜æœªè°ƒè¯•
 
 
 
-string class_name[10]={"¼Æ¿Æ1°à","¼Æ¿Æ2°à","ĞÅ°²1°à","ĞÅ°²2°à","Íø¹¤1°à","Íø¹¤2°à","»·Ôº1°à","»·Ôº2°à","Èí¼ş1°à","Èí¼ş1°à"};
-string grade_name[4]={"2017¼¶","2018¼¶","2019¼¶","2020¼¶"};
-string major_name[10]={"¼ÆËã»ú¿ÆÑ§Óë¼¼Êõ","¼ÆËã»ú¿ÆÑ§Óë¼¼Êõ","ĞÅÏ¢°²È«","ĞÅÏ¢°²È«","ÍøÂç¹¤³Ì","ÍøÂç¹¤³Ì","»·¾³°²È«","»·¾³°²È«","Èí¼ş×¨Òµ","Èí¼ş×¨Òµ"}
-string college_name[10]={"¼ÆËã»ú¿ÆÑ§Óë¹¤³ÌÑ§Ôº","¼ÆËã»ú¿ÆÑ§Óë¹¤³ÌÑ§Ôº","¼ÆËã»ú¿ÆÑ§Óë¹¤³ÌÑ§Ôº","¼ÆËã»ú¿ÆÑ§Óë¹¤³ÌÑ§Ôº","¼ÆËã»ú¿ÆÑ§Óë¹¤³ÌÑ§Ôº","¼ÆËã»ú¿ÆÑ§Óë¹¤³ÌÑ§Ôº","»·¾³¿ÆÑ§Óë¹¤³ÌÑ§Ôº","»·¾³¿ÆÑ§Óë¹¤³ÌÑ§Ôº","Èí¼şÑ§Ôº","Èí¼şÑ§Ôº"};
-string before_name[20]={"ÕÔ", "Ç®", "Ëï", "Àî", "ÖÜ", "Îâ", "Ö£", "Íõ", "·ë", "³Â", "ñÒ", "ÎÀ", "Ñî","Óà","Â¬","Åí","ÍòÙ¹", "Ë¾Âí", "ÉÏ¹Ù", "Å·Ñô"};
-string after_name[140]={"Î°", "¸Õ", "ÓÂ", "Òã", "¿¡", "·å", "Ç¿", "¾ü", "Æ½", "±£", "¶«", "ÎÄ", "»Ô", "Á¦", "Ã÷", "ÓÀ", "½¡", "ÊÀ", "¹ã", "Ö¾", "Òå", "ĞË", "Á¼", "º£", "É½", "ÈÊ", "²¨", "Äş", "¹ó", "¸£", "Éú", "Áú", "Ôª", "È«", "¹ú", "Ê¤", "Ñ§", "Ïé", "²Å", "·¢", "Îä", "ĞÂ", "Àû", "Çå", "·É", "±ò","¸»", "Ë³", "ĞÅ", "×Ó", "½Ü", "ÌÎ", "²ı", "³É", "¿µ", "ĞÇ", "¹â", "Ìì", "´ï", "°²", "ÑÒ", "ÖĞ", "Ã¯", "½ø", "ÁÖ", "ÓĞ", "¼á", "ºÍ", "±ë", "²©", "³Ï", "ÏÈ", "¾´", "Õğ", "Õñ", "×³", "»á", "Ë¼", "Èº", "ºÀ", "ĞÄ", "°î", "³Ğ", "ÀÖ", "ÉÜ", "¹¦", "ËÉ", "ÉÆ", "ºñ", "Çì", "ÀÚ", "Ãñ", "ÓÑ", "Ô£", "ºÓ", "ÕÜ", "½­", "³¬", "ºÆ", "ÁÁ", "Õş", "Ç«", "ºà", "Ææ", "¹Ì", "Ö®", "ÂÖ", "º²", "ÀÊ", "²®", "ºê", "ÑÔ", "Èô", "Ãù", "Åó", "±ó", "Áº", "¶°", "Î¬", "Æô", "¿Ë", "Â×", "Ïè", "Ğñ", "Åô", "Ôó", "³¿", "³½", "Ê¿", "ÒÔ", "½¨", "¼Ò", "ÖÂ", "Ê÷", "Ñ×", "µÂ", "ĞĞ", "Ê±", "Ì©", "Ê¢"};
-int index_class=-1;  //ÓÃµ½µÄ°à¼¶Êı£¬×î¶àÖ»ÄÜÉú³É10¸ö°à¼¶ÎÄ¼ş
-string before_num="20003034";   //Ñ§ºÅÇ°Ãæ¹Ì¶¨Î»£¬Ñ§ºÅ¹²12Î»£¬¹Ì¶¨Î»8Î»
-ine index_num=-1;   //Ñ§ºÅºó4Î»£¬°´Ë³ĞòµİÔö
-string sex[2]=["ÄĞ","Å®"];
-string tea_number="20001233"; //ÀÏÊ¦¡¢½ÌÎñÔ±¹¤ºÅ¹Ì¶¨ÊÇ12Îª
-int index_num_tea=-1;
+string class_name[10] = { "è®¡ç§‘1ç­","è®¡ç§‘2ç­","ä¿¡å®‰1ç­","ä¿¡å®‰2ç­","ç½‘å·¥1ç­","ç½‘å·¥2ç­","ç¯é™¢1ç­","ç¯é™¢2ç­","è½¯ä»¶1ç­","è½¯ä»¶1ç­" };
+string grade_name[4] = { "2017çº§","2018çº§","2019çº§","2020çº§" };
+string major_name[10] = { "è®¡ç®—æœºç§‘å­¦ä¸æŠ€æœ¯","è®¡ç®—æœºç§‘å­¦ä¸æŠ€æœ¯","ä¿¡æ¯å®‰å…¨","ä¿¡æ¯å®‰å…¨","ç½‘ç»œå·¥ç¨‹","ç½‘ç»œå·¥ç¨‹","ç¯å¢ƒå®‰å…¨","ç¯å¢ƒå®‰å…¨","è½¯ä»¶ä¸“ä¸š","è½¯ä»¶ä¸“ä¸š" };
+string college_name[10] = { "è®¡ç®—æœºç§‘å­¦ä¸å·¥ç¨‹å­¦é™¢","è®¡ç®—æœºç§‘å­¦ä¸å·¥ç¨‹å­¦é™¢","è®¡ç®—æœºç§‘å­¦ä¸å·¥ç¨‹å­¦é™¢","è®¡ç®—æœºç§‘å­¦ä¸å·¥ç¨‹å­¦é™¢","è®¡ç®—æœºç§‘å­¦ä¸å·¥ç¨‹å­¦é™¢","è®¡ç®—æœºç§‘å­¦ä¸å·¥ç¨‹å­¦é™¢","ç¯å¢ƒç§‘å­¦ä¸å·¥ç¨‹å­¦é™¢","ç¯å¢ƒç§‘å­¦ä¸å·¥ç¨‹å­¦é™¢","è½¯ä»¶å­¦é™¢","è½¯ä»¶å­¦é™¢" };
+string before_name[20] = { "èµµ", "é’±", "å­™", "æ", "å‘¨", "å´", "éƒ‘", "ç‹", "å†¯", "é™ˆ", "è¤š", "å«", "æ¨","ä½™","å¢","å½­","ä¸‡ä¿Ÿ", "å¸é©¬", "ä¸Šå®˜", "æ¬§é˜³" };
+string after_name[140] = { "ä¼Ÿ", "åˆš", "å‹‡", "æ¯…", "ä¿Š", "å³°", "å¼º", "å†›", "å¹³", "ä¿", "ä¸œ", "æ–‡", "è¾‰", "åŠ›", "æ˜", "æ°¸", "å¥", "ä¸–", "å¹¿", "å¿—", "ä¹‰", "å…´", "è‰¯", "æµ·", "å±±", "ä»", "æ³¢", "å®", "è´µ", "ç¦", "ç”Ÿ", "é¾™", "å…ƒ", "å…¨", "å›½", "èƒœ", "å­¦", "ç¥¥", "æ‰", "å‘", "æ­¦", "æ–°", "åˆ©", "æ¸…", "é£", "å½¬","å¯Œ", "é¡º", "ä¿¡", "å­", "æ°", "æ¶›", "æ˜Œ", "æˆ", "åº·", "æ˜Ÿ", "å…‰", "å¤©", "è¾¾", "å®‰", "å²©", "ä¸­", "èŒ‚", "è¿›", "æ—", "æœ‰", "åš", "å’Œ", "å½ª", "åš", "è¯š", "å…ˆ", "æ•¬", "éœ‡", "æŒ¯", "å£®", "ä¼š", "æ€", "ç¾¤", "è±ª", "å¿ƒ", "é‚¦", "æ‰¿", "ä¹", "ç»", "åŠŸ", "æ¾", "å–„", "åš", "åº†", "ç£Š", "æ°‘", "å‹", "è£•", "æ²³", "å“²", "æ±Ÿ", "è¶…", "æµ©", "äº®", "æ”¿", "è°¦", "äº¨", "å¥‡", "å›º", "ä¹‹", "è½®", "ç¿°", "æœ—", "ä¼¯", "å®", "è¨€", "è‹¥", "é¸£", "æœ‹", "æ–Œ", "æ¢", "æ ‹", "ç»´", "å¯", "å…‹", "ä¼¦", "ç¿”", "æ—­", "é¹", "æ³½", "æ™¨", "è¾°", "å£«", "ä»¥", "å»º", "å®¶", "è‡´", "æ ‘", "ç‚", "å¾·", "è¡Œ", "æ—¶", "æ³°", "ç››" };
+int index_class = -1;  //ç”¨åˆ°çš„ç­çº§æ•°ï¼Œæœ€å¤šåªèƒ½ç”Ÿæˆ10ä¸ªç­çº§æ–‡ä»¶
+string before_num = "20003034";   //å­¦å·å‰é¢å›ºå®šä½ï¼Œå­¦å·å…±12ä½ï¼Œå›ºå®šä½8ä½
+int index_num = -1;   //å­¦å·å4ä½ï¼ŒæŒ‰é¡ºåºé€’å¢
+string sex[] = { "ç”·", "å¥³"};
+string tea_number = "20001233"; //è€å¸ˆã€æ•™åŠ¡å‘˜å·¥å·å›ºå®šæ˜¯12ä¸º
+int index_num_tea = -1;
 
-string file_student="D:\\dataWork\\Class\\";  //´æ´¢Ñ§ÉúĞÅÏ¢ÎÄ¼şÂ·¾¶
-string file_course="D:\\dataWork\\Course\\";  //´æ´¢¿Î³ÌĞÅÏ¢ÎÄ¼şÂ·¾¶
-string file_teacher="D:\\dataWork\\teacher.dat";  //´æ´¢½ÌÊ¦ĞÅÏ¢ÎÄ¼şÂ·¾¶
-string file_admini="D:\\dataWork\\admini.dat";    //´æ´¢½ÌÎñÔ±ĞÅÏ¢ÎÄ¼şÂ·¾¶
-string file_index="D:\\dataWork\\index\\";       //´æ´¢Ë÷ÒıÎÄ¼şÂ·¾¶
+string file_student = "Class\\";  //å­˜å‚¨å­¦ç”Ÿä¿¡æ¯æ–‡ä»¶è·¯å¾„
+string file_course = "Course\\";  //å­˜å‚¨è¯¾ç¨‹ä¿¡æ¯æ–‡ä»¶è·¯å¾„
+string file_teacher = "teacher.dat";  //å­˜å‚¨æ•™å¸ˆä¿¡æ¯æ–‡ä»¶è·¯å¾„
+string file_admini = "admini.dat";    //å­˜å‚¨æ•™åŠ¡å‘˜ä¿¡æ¯æ–‡ä»¶è·¯å¾„
+string file_index = "index\\";       //å­˜å‚¨ç´¢å¼•æ–‡ä»¶è·¯å¾„
 
-string course_name={"Êı¾İ½á¹¹","Êı¾İ½á¹¹","Âí¿ËË¼Êµ¼ù","Âí¿ËË¼Êµ¼ù","´óÑ§Ó¢Óï","´óÑ§Ó¢Óï"};
-string course_class={"ÕÅÍş1°à","ÕÅÍş2°à","ÍõÃÈ1°à","ÍõÃÈ2°à","ÀîÀ×1°à","ÀîÀ×2°à"};
+string course_name[] = { "æ•°æ®ç»“æ„","æ•°æ®ç»“æ„","é©¬å…‹æ€å®è·µ","é©¬å…‹æ€å®è·µ","å¤§å­¦è‹±è¯­","å¤§å­¦è‹±è¯­" };
+string course_class[] = { "å¼ å¨1ç­","å¼ å¨2ç­","ç‹èŒ1ç­","ç‹èŒ2ç­","æé›·1ç­","æé›·2ç­" };
 
-string getRandomNum(int & index_num)  //»ñÈ¡Ñ§ºÅ
+string getRandomNum(int& index_num)  //è·å–å­¦å·
 {
-    index_num++;
-    if(index_num<10)
-    {
-        string temp=before_num+"000"+to_string(index_num);
-    }
-    else if(index_num<100)
-    {
-        string temp=before_num+"00"+to_string(index_num);
-    }
-    else if(index_num<1000)
-    {
-        string temp=before_num+"0"+to_string(index_num);
-    }
-    else
-    {
-        string temp=before_num+to_string(index_num);
-    }
-    return temp;
+	index_num++;
+	string temp;
+	if (index_num < 10)
+	{
+		temp = before_num + "000" + to_string(index_num);
+	}
+	else if (index_num < 100)
+	{
+		temp = before_num + "00" + to_string(index_num);
+	}
+	else if (index_num < 1000)
+	{
+		temp = before_num + "0" + to_string(index_num);
+	}
+	else
+	{
+		temp = before_num + to_string(index_num);
+	}
+	return temp;
 }
 
-string getRandomSex()  //»ñµÃËæ»úĞÔ±ğ
+string getRandomSex()  //è·å¾—éšæœºæ€§åˆ«
 {
-    int x=rand()%2;
-    return sex[x];
+	int x = rand() % 2;
+	return sex[x];
 }
 
-string getRandomName()  //»ñµÃËæ»úĞÕÃû
+string getRandomName()  //è·å¾—éšæœºå§“å
 {
-    int x=rand()%20;
-    int y=rand()%140;
-    string temp=before_name[x]+after_name[y];
-    return temp;
+	int x = rand() % 20;
+	int y = rand() % 140;
+	string temp = before_name[x] + after_name[y];
+	return temp;
 }
 
-string addRandomClass()  //Ëæ»úÉú³É°à¼¶ĞÅÏ¢
+void addRandomClass()  //éšæœºç”Ÿæˆç­çº§ä¿¡æ¯
 {
-    int student_num=rand()%70;
-    if(student_num<20) student+=20;  //°à¼¶×îÉÙ20ÈË
-    int xx=rand()%4;  //Ëæ»ú»ñµÃÄê¼¶ĞÅÏ¢
-    string temp_grade=grade_name[xx];
-    index_class++;  //°´Ë³Ğò´´½¨°à¼¶
-    for(int i=0;i<student_num;i++)
-    {
-        Student x;
-        x.set_number(getRandomNum(index_num));
-        x.set_name(getRandomName());
-        x.set_grade(temp_grade);
-        x.set_college(college_name[index_class]);
-        x.set_major(major_name[index_class]);
-        x.set_class(class_name[index_class]);
-        x.set_pass("123456");  //ÉèÖÃ³õÊ¼ÃÜÂë
-        x.set_course("\0");
+	int student_num = rand() % 70;
+	if (student_num < 20) student_num += 20;  //ç­çº§æœ€å°‘20äºº
+	int xx = rand() % 4;  //éšæœºè·å¾—å¹´çº§ä¿¡æ¯
+	string temp_grade = grade_name[xx];
+	index_class++;  //æŒ‰é¡ºåºåˆ›å»ºç­çº§
+	for (int i = 0;i < student_num;i++)
+	{
+		Student x;
+		x.set_number(getRandomNum(index_num));
+		x.set_name(getRandomName());
+		x.set_grade(temp_grade);
+		x.set_college(college_name[index_class]);
+		x.set_major(major_name[index_class]);
+		x.set_class(class_name[index_class]);
+		x.set_pass("123456");  //è®¾ç½®åˆå§‹å¯†ç 
+		x.set_course("\0");
 
-        //Ëæ»úÉú³É¿Î³ÌĞÅÏ¢
-        //ÕâÀïÏÈÉè¶¨Ã¿¸öÑ§ÉúÖ»Ñ¡Ò»ÃÅ¿Î
-        int flag=rand()%6;
+		//éšæœºç”Ÿæˆè¯¾ç¨‹ä¿¡æ¯
+		//è¿™é‡Œå…ˆè®¾å®šæ¯ä¸ªå­¦ç”Ÿåªé€‰ä¸€é—¨è¯¾
+		int flag = rand() % 6;
 
-        Course temp;
-        string fileName = file_course+cou_name + "/" + class_name + ".dat";
-        temp.stu_name = info.name; temp.stu_number = info.number;
-        temp.usual_grade = "None"; temp.final_grade = "None"; temp.overall_grade = "None";
-        x.transCourse(temp,course_name[flag],course_class[flag]);   //ĞŞ¸ÄÑ§Éú¿Î³ÌĞÅÏ¢
-        addInfo(temp, fileName); //ĞŞ¸Ä¿Î³ÌÎÄ¼şĞÅÏ¢
+		Course temp;
+		string fileName = file_course + course_name[flag] + "/" + course_class[flag] + ".dat";
+		temp.stu_name = x.name; temp.stu_number = x.number;
+		temp.usual_grade = "None"; temp.final_grade = "None"; temp.overall_grade = "None";
+		x.transCourse(temp, course_name[flag], course_class[flag]);   //ä¿®æ”¹å­¦ç”Ÿè¯¾ç¨‹ä¿¡æ¯
+		course_name[1];
+		addInfo(temp, fileName); //ä¿®æ”¹è¯¾ç¨‹æ–‡ä»¶ä¿¡æ¯
 
-        //½«Ñ§ÉúĞÅÏ¢Ìí¼Ó½øÎÄ¼ş
-        addPerson(x,Stu_name,Stu_number,file_student+class_name[index_class],file_index+"Stu_name.dat",file_index+"Stu_number.dat");
-    }
+		//å°†å­¦ç”Ÿä¿¡æ¯æ·»åŠ è¿›æ–‡ä»¶
+		addPerson(x, Stu_name, Stu_number, file_student + class_name[index_class], file_index + "Stu_name.dat", file_index + "Stu_number.dat");
+	}
 }
 
-//ÔİÊ±Ö»Éú³É¼¸¸öÀÏÊ¦ĞÅÏ¢
-string addRandomTeacher()
+//æš‚æ—¶åªç”Ÿæˆå‡ ä¸ªè€å¸ˆä¿¡æ¯
+void addRandomTeacher()
 {
-    Teacher x1(getRandomNum(index_num_tea),"123456","ÕÅÍş","Êı¾İ½á¹¹/ÕÅÍş1°à&Êı¾İ½á¹¹/ÕÅÍş2°à&");
-    Teacher x2(getRandomNum(index_num_tea),"123456","ÍõÃÈ","Âí¿ËË¼Êµ¼ù/ÍõÃÈ1°à&Âí¿ËË¼Êµ¼ù¿Î/ÍõÃÈ2°à&");
-    Teacher x3(getRandomNum(index_num_tea),"123456","ÀîÀ×","´óÑ§Ó¢Óï/ÀîÀ×1°à&´óÑ§Ó¢Óï/ÀîÀ×2°à&");
+	Teacher x1(getRandomNum(index_num_tea), "123456", "å¼ å¨", "æ•°æ®ç»“æ„/å¼ å¨1ç­&æ•°æ®ç»“æ„/å¼ å¨2ç­&");
+	Teacher x2(getRandomNum(index_num_tea), "123456", "ç‹èŒ", "é©¬å…‹æ€å®è·µ/ç‹èŒ1ç­&é©¬å…‹æ€å®è·µè¯¾/ç‹èŒ2ç­&");
+	Teacher x3(getRandomNum(index_num_tea), "123456", "æé›·", "å¤§å­¦è‹±è¯­/æé›·1ç­&å¤§å­¦è‹±è¯­/æé›·2ç­&");
 
-    Admini y1;
-    y1.number=getRandomNum(index_num_tea),y1.password="123456",y1.name="º«Ã·Ã·";
+	Admini y1;
+	y1.number = getRandomNum(index_num_tea), y1.password = "123456", y1.name = "éŸ©æ¢…æ¢…";
 
-    addPerson(y1,Ad,file_admini,file_index+"Admini_index.dat");  //Ôö¼Ó½ÌÎñÔ±ĞÅÏ¢
-    addPerson(x1,Tea,file_teacher+file_index+"Teacher_index.dat");  //Ôö¼Ó½ÌÊ¦ĞÅÏ¢
-    addPerson(x2,Tea,file_teacher+file_index+"Teacher_index.dat");  //Ôö¼Ó½ÌÊ¦ĞÅÏ¢
-    addPerson(x3,Tea,file_teacher+file_index+"Teacher_index.dat");  //Ôö¼Ó½ÌÊ¦ĞÅÏ¢
+	addPerson(y1, Ad, file_admini, file_index + "Admini_index.dat");  //å¢åŠ æ•™åŠ¡å‘˜ä¿¡æ¯
+	addPerson(x1, Tea, file_teacher , file_index + "Teacher_index.dat");  //å¢åŠ æ•™å¸ˆä¿¡æ¯
+	addPerson(x2, Tea, file_teacher , file_index + "Teacher_index.dat");  //å¢åŠ æ•™å¸ˆä¿¡æ¯
+	addPerson(x3, Tea, file_teacher , file_index + "Teacher_index.dat");  //å¢åŠ æ•™å¸ˆä¿¡æ¯
 
-    //Ôö¼Ó¼¸¸ö¿Î³ÌµÄÎÄ¼ş
-    cou_info a1,a2,a3,a4,a5,a6;
-    a1.cou_name="Êı¾İ½á¹¹",a1.class_name="ÕÅÍş1°à",a1.tea_name="ÕÅÍş",a1.position="A3 306",a1.time="ÖÜÒ»µÚÒ»µÚ¶ş½Ú",a1.propotion=0.4;
-    a2.cou_name="Êı¾İ½á¹¹",a2.class_name="ÕÅÍş2°à",a2.tea_name="ÕÅÍş",a2.position="A3 306",a2.time="ÖÜ¶şµÚÒ»µÚ¶ş½Ú",a2.propotion=0.4;
-    a3.cou_name="Âí¿ËË¼Êµ¼ù",a3.class_name="ÍõÃÈ1°à",a3.tea_name="ÍõÃÈ",a3.position="A2 206",a3.time="ÖÜÒ»µÚÁùµÚÆß½Ú",a3.propotion=0.5;
-    a4.cou_name="Âí¿ËË¼Êµ¼ù",a4.class_name="ÍõÃÈ2°à",a4.tea_name="ÍõÃÈ",a4.position="A2 306",a4.time="ÖÜ¶şµÚÒ»µÚ¶ş½Ú",a4.propotion=0.5;
-    a5.cou_name="´óÑ§Ó¢Óï",a5.class_name="ÀîÀ×1°à",a5.tea_name="ÀîÀ×",a5.position="A4 306",a5.time="ÖÜÈıµÚÒ»µÚ¶ş½Ú",a5.propotion=0.3;
-    a6.cou_name="´óÑ§Ó¢Óï",a6.class_name="ÀîÀ×2°à",a6.tea_name="ÀîÀ×",a6.position="A4 306",a6.time="ÖÜËÄµÚÒ»µÚ¶ş½Ú",a6.propotion=0.3;
-    fstream f(file_Course+"Êı¾İ½á¹¹//ÕÅÍş1°à.dat",ios::in|ios::out|ios::binary); f.write((char*)&a1,sizeof(a1)); f.close();
-    fstream f(file_Course+"Êı¾İ½á¹¹//ÕÅÍş2°à.dat",ios::in|ios::out|ios::binary); f.write((char*)&a2,sizeof(a2)); f.close();
-    fstream f(file_Course+"Âí¿ËË¼Êµ¼ù//ÍõÃÈ1°à.dat",ios::in|ios::out|ios::binary); f.write((char*)&a3,sizeof(a3)); f.close();
-    fstream f(file_Course+"Âí¿ËË¼Êµ¼ù//ÍõÃÈ2°à.dat",ios::in|ios::out|ios::binary); f.write((char*)&a4,sizeof(a4)); f.close();
-    fstream f(file_Course+"´óÑ§Ó¢Óï/ÀîÀ×1°à.dat",ios::in|ios::out|ios::binary); f.write((char*)&a5,sizeof(a5)); f.close();
-    fstream f(file_Course+"´óÑ§Ó¢Óï//ÀîÀ×2°à.dat",ios::in|ios::out|ios::binary); f.write((char*)&a6,sizeof(a6)); f.close();
+	//å¢åŠ å‡ ä¸ªè¯¾ç¨‹çš„æ–‡ä»¶
+	cou_info a1, a2, a3, a4, a5, a6;
+	a1.cou_name = "æ•°æ®ç»“æ„", a1.class_name = "å¼ å¨1ç­", a1.tea_name = "å¼ å¨", a1.position = "A3 306", a1.time = "å‘¨ä¸€ç¬¬ä¸€ç¬¬äºŒèŠ‚", a1.propotion = 0.4;
+	a2.cou_name = "æ•°æ®ç»“æ„", a2.class_name = "å¼ å¨2ç­", a2.tea_name = "å¼ å¨", a2.position = "A3 306", a2.time = "å‘¨äºŒç¬¬ä¸€ç¬¬äºŒèŠ‚", a2.propotion = 0.4;
+	a3.cou_name = "é©¬å…‹æ€å®è·µ", a3.class_name = "ç‹èŒ1ç­", a3.tea_name = "ç‹èŒ", a3.position = "A2 206", a3.time = "å‘¨ä¸€ç¬¬å…­ç¬¬ä¸ƒèŠ‚", a3.propotion = 0.5;
+	a4.cou_name = "é©¬å…‹æ€å®è·µ", a4.class_name = "ç‹èŒ2ç­", a4.tea_name = "ç‹èŒ", a4.position = "A2 306", a4.time = "å‘¨äºŒç¬¬ä¸€ç¬¬äºŒèŠ‚", a4.propotion = 0.5;
+	a5.cou_name = "å¤§å­¦è‹±è¯­", a5.class_name = "æé›·1ç­", a5.tea_name = "æé›·", a5.position = "A4 306", a5.time = "å‘¨ä¸‰ç¬¬ä¸€ç¬¬äºŒèŠ‚", a5.propotion = 0.3;
+	a6.cou_name = "å¤§å­¦è‹±è¯­", a6.class_name = "æé›·2ç­", a6.tea_name = "æé›·", a6.position = "A4 306", a6.time = "å‘¨å››ç¬¬ä¸€ç¬¬äºŒèŠ‚", a6.propotion = 0.3;
+	fstream f1(file_course + "æ•°æ®ç»“æ„//å¼ å¨1ç­.dat", ios::in | ios::out | ios::binary); f1.write((char*)&a1, sizeof(a1)); f1.close();
+	fstream f2(file_course + "æ•°æ®ç»“æ„//å¼ å¨2ç­.dat", ios::in | ios::out | ios::binary); f2.write((char*)&a2, sizeof(a2)); f2.close();
+	fstream f3(file_course + "é©¬å…‹æ€å®è·µ//ç‹èŒ1ç­.dat", ios::in | ios::out | ios::binary); f3.write((char*)&a3, sizeof(a3)); f3.close();
+	fstream f4(file_course + "é©¬å…‹æ€å®è·µ//ç‹èŒ2ç­.dat", ios::in | ios::out | ios::binary); f4.write((char*)&a4, sizeof(a4)); f4.close();
+	fstream f5(file_course + "å¤§å­¦è‹±è¯­/æé›·1ç­.dat", ios::in | ios::out | ios::binary); f5.write((char*)&a5, sizeof(a5)); f5.close();
+	fstream f6(file_course + "å¤§å­¦è‹±è¯­//æé›·2ç­.dat", ios::in | ios::out | ios::binary); f6.write((char*)&a6, sizeof(a6)); f6.close();
 }
 
-//×¢£º¼ÇµÃ¸øÃ¿¸öĞ´ÎÄ¼ş²Ù×÷º¯Êı¼ÓÉÏ ios::in ·ñÔòÖØĞ´ÎÄ¼ş
+//æ³¨ï¼šè®°å¾—ç»™æ¯ä¸ªå†™æ–‡ä»¶æ“ä½œå‡½æ•°åŠ ä¸Š ios::in å¦åˆ™é‡å†™æ–‡ä»¶
