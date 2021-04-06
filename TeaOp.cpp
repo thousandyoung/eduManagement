@@ -3,7 +3,7 @@
 #include<sstream>
 struct cou_info {
 	char cou_name[20];		//课程名字
-	char class_name[20];		//教学班名
+	char class_name[20];	//教学班名
 	char tea_name[20];		//授课老师姓名
 	char position[20];		//授课地点
 	char time[20];			//授课时间
@@ -22,9 +22,21 @@ vector<string>TeaOp::getTeaCourse(const Teacher& tea) {
 	return split(tea.course, "&");
 }
 
+vector<pair<vector<Course>, string>>TeaOp::getAllStudent(const Teacher& tea) {
+	vector<string>courses = getTeaCourse(tea);
+	vector<pair<vector<Course>, string>> allCourse;
+	for (auto course : courses) {
+		getInfo(course);
+		vector<Course>temp = Tea_ReadClassScore();
+		pair<vector<Course>, string>it = make_pair(temp, cur_course.class_name);
+		allCourse.push_back(it);
+	}
+	return allCourse;
+}
+
 //将课程中所有信息读出来
 vector<Course> TeaOp::Tea_ReadClassScore() {
-	string cur_filename = "course/" + cur_course.cou_name + "/" + cur_course.class_name + ".dat";
+	string cur_filename = "course/" + string(cur_course.cou_name) + "/" + string(cur_course.class_name) + ".dat";
 	fstream f(cur_filename, ios::in|ios::binary);
 	f.read((char*)&cur_course, sizeof(cur_course));
 	vector<Course>classStu;
@@ -56,7 +68,7 @@ void TeaOp::getInfo(string c_name) {
 //设置当前课程成绩计算比例
 void TeaOp::Tea_SetPropotion(double proportion) {
 	cur_course.propotion = proportion;
-	string cur_filename = "course/" + cur_course.cou_name + "/" + cur_course.class_name + ".dat";
+	string cur_filename = "course/" + string(cur_course.cou_name) + "/" + string(cur_course.class_name) + ".dat";
 	fstream f(cur_filename, ios::out | ios::binary);
 	f.write((char*)&cur_course, sizeof(cur_course));
 	f.close();
@@ -65,7 +77,7 @@ void TeaOp::Tea_SetPropotion(double proportion) {
 int TeaOp::InputScore(string number,double score1,double score2) {
 	vector<Student>s;
 	if (copyInfo(number, Stu_number, s)==0)return 0;
-	string cur_filename = "course/" + cur_course.cou_name + "/" + cur_course.class_name + ".dat";
+	string cur_filename = "course/" + string(cur_course.cou_name) + "/" + string(cur_course.class_name) + ".dat";
 	Course temp(s[0].name, s[0].number, to_string(score1).c_str(), to_string(score2).c_str(), to_string(score1 * cur_course.propotion + (1 - cur_course.propotion) * score2).c_str());
 	fstream f(cur_filename, ios::binary | ios::out | ios::in);
 	Course stu_temp;
@@ -98,8 +110,8 @@ int TeaOp::changeScore(vector<Student>s,double score) {
 		}
 	}
 	if (i == s_course.size())s_course.push_back( string(cur_course.cou_name) + "/" + to_string(score));
-	s[0].course = "";
-	for (auto c : s_course)s[0].course += c;//修改学生对象里的course
+	strcpy(s[0].course, "");
+	for (auto c : s_course)Connect(s[0].course, (char*)c.data(), s[0].course);//修改学生对象里的course
 	modifyInfo(s[0].number, Stu_number, s[0]);//修改学生文件
 	return 1;
 }
